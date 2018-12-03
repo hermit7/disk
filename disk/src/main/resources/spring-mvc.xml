@@ -4,22 +4,23 @@
 	xmlns:p="http://www.springframework.org/schema/p"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:mvc="http://www.springframework.org/schema/mvc"
-	xmlns:task="http://www.springframework.org/schema/task"
 	xsi:schemaLocation="
         http://www.springframework.org/schema/beans 
         http://www.springframework.org/schema/beans/spring-beans-4.1.xsd 
         http://www.springframework.org/schema/context 
         http://www.springframework.org/schema/context/spring-context-4.1.xsd 
         http://www.springframework.org/schema/mvc 
-        http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd 
-        http://www.springframework.org/schema/task 
-        http://www.springframework.org/schema/task/spring-task-4.1.xsd">
+        http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd ">
 
 	<!-- 使用注解开发，不用配置controller，需要配置一个组件扫描器 -->
 	<mvc:annotation-driven></mvc:annotation-driven>
+	<mvc:default-servlet-handler/>
+	<mvc:resources location="/images/" mapping="/images/**"/> 
+  	<mvc:resources location="/js/" mapping="/js/**"/>
+  	<mvc:resources location="/css/" mapping="/css/**"/>
+  	<mvc:resources location="/easyui/" mapping="/easyui/**"/>
 	<!-- 扫描所有的controller 但是不扫描service -->
-	<context:component-scan
-		base-package="com.ise.*">
+	<context:component-scan base-package="com.ise.*">
 		<context:include-filter type="annotation"
 			expression="org.springframework.stereotype.Controller" />
 		<context:exclude-filter type="annotation"
@@ -30,7 +31,11 @@
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		配置从项目根目录到指定目录一端路径 ,建议指定浅一点的目录
 		<property name="prefix" value="/WEB-INF/jsp/"></property>
-		文件的后缀名
 		<property name="suffix" value=".jsp"></property>
 	</bean> -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 配置文件（每次上传的所有文件总大小)大小,单位为b, 1024000表示1000kb  -->
+		<property name="maxUploadSize" value="1024000000" />		
+	</bean> 
+	
 </beans>
