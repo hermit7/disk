@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.FileUtil;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IOUtils;
 import org.apache.hadoop.util.Progressable;
@@ -17,7 +18,8 @@ import org.springframework.stereotype.Repository;
 import com.ise.dao.HdfsDao;
 import com.ise.dao.conn.HdfsConn;
 import com.ise.pojo.HFile;
-import com.ise.util.FileUtil;
+import com.ise.pojo.HdfsFolder;
+import com.ise.util.MyFileUtil;
 import com.ise.util.PathUtil;
 
 @Repository("hdfsDao")
@@ -51,12 +53,12 @@ public class HdfsDaoImpl implements HdfsDao {
 				String name = p.getName();
 				file.setName(name);
 				file.setPath(p.toString().replaceAll("^.+://.+:[0-9]+/", "/"));
-				file.setTime(FileUtil.fileTimeFormat(status.getModificationTime()));
-				file.setSize(FileUtil.fileSizeFormat(status.getLen()));
+				file.setTime(MyFileUtil.fileTimeFormat(status.getModificationTime()));
+				file.setSize(MyFileUtil.fileSizeFormat(status.getLen()));
 				if (status.isDirectory()) {
 					file.setType("d");
 				} else {
-					file.setType(FileUtil.getFileType(name));
+					file.setType(MyFileUtil.getFileType(name));
 				}
 				list.add(file);
 			}
@@ -145,6 +147,35 @@ public class HdfsDaoImpl implements HdfsDao {
 			flag =  fs.mkdirs(new Path(path));
 		}  catch (IOException e) {
 			flag = false;
+			e.printStackTrace();
+		}
+		return flag;
+	}
+
+	@Override
+	public HdfsFolder listTree() {
+		return PathUtil.listFolder();
+	}
+
+	@Override
+	public boolean copyFile(String src, String dst) {
+		boolean flag = false;
+		try {
+			flag = FileUtil.copy(HdfsConn.getFileSystem(), new Path(src), 
+					HdfsConn.getFileSystem(), new Path(dst), false, HdfsConn.getConfiguration());
+		}  catch (IOException e) {
+			e.printStackTrace();
+		}
+		return flag;
+	}
+
+	@Override
+	public boolean moveFile(String src, String dst) {
+		boolean flag = false;
+		try {
+			flag = FileUtil.copy(HdfsConn.getFileSystem(), new Path(src), 
+					HdfsConn.getFileSystem(), new Path(dst), true, HdfsConn.getConfiguration());
+		}  catch (IOException e) {
 			e.printStackTrace();
 		}
 		return flag;
