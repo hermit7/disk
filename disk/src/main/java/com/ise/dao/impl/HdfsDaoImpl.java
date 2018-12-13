@@ -1,6 +1,5 @@
 package com.ise.dao.impl;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -15,6 +14,7 @@ import org.apache.hadoop.io.IOUtils;
 import org.apache.hadoop.util.Progressable;
 import org.springframework.stereotype.Repository;
 
+import com.ise.constant.Constants;
 import com.ise.dao.HdfsDao;
 import com.ise.dao.conn.HdfsConn;
 import com.ise.pojo.HFile;
@@ -27,13 +27,46 @@ public class HdfsDaoImpl implements HdfsDao {
 
 	private static FileSystem fs = HdfsConn.getFileSystem();
 
-	public static void main(String[] args) throws FileNotFoundException {
-		HdfsDao dao = new HdfsDaoImpl();
-
-		List<HFile> list = dao.listFiles("/");
-		for (HFile file : list) {
-			System.out.println(file.toString());
+	public static void main(String[] args) throws Exception {
+		Path path = new Path("/disk/lzy/Git-2.18.0-64-bit.exe");
+		boolean b = fs.exists(path);
+		System.out.println(path.toString());
+		if (b) {
+			FileStatus listXAttrs = fs.getFileStatus(path);
+			System.out.println(listXAttrs);
+		} else {
+			System.out.println("123124");
 		}
+	}
+	
+	public HFile getFileStatus(String path) {
+		HFile file = new HFile();
+		Path p = new Path(path);
+		try {
+			FileStatus status = fs.getFileStatus(p);
+			String name = p.getName();
+			file.setName(name);
+			file.setSize(MyFileUtil.fileSizeFormat(status.getLen()));
+			file.setPath(path.toString());
+			if (status.isDirectory()) {
+				file.setType("d");
+			} else {
+				file.setType(MyFileUtil.getFileType(name));
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return file;
+	}
+	
+	
+	public boolean isPathExist(String path) {
+		try {
+			return fs.exists(new Path(path));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 	/**
@@ -42,11 +75,12 @@ public class HdfsDaoImpl implements HdfsDao {
 	 * @return
 	 */
 	public List<HFile> listFiles(String path) {
+		Path userRoot = new Path(path);
 		ArrayList<HFile> list = new ArrayList<>();
 		HFile file = null;
 
 		try {
-			FileStatus[] listStatus = fs.listStatus(new Path(path));
+			FileStatus[] listStatus = fs.listStatus(userRoot);
 			for (FileStatus status : listStatus) {
 				file = new HFile();
 				Path p = status.getPath();
@@ -66,13 +100,6 @@ public class HdfsDaoImpl implements HdfsDao {
 			e.printStackTrace();
 		}
 		return list;
-	}
-
-	/**
-	 * 新建文件夹
-	 */
-	public void mkdir() {
-
 	}
 
 	/**
@@ -139,31 +166,50 @@ public class HdfsDaoImpl implements HdfsDao {
 		return flag;
 	}
 
+	/**
+	 * 用户新建文件夹
+	 */
 	@Override
 	public boolean makeDir(String curPath, String folder) {
 		boolean flag = true;
 		String path = PathUtil.formatPath(curPath, folder);
 		try {
-			flag =  fs.mkdirs(new Path(path));
-		}  catch (IOException e) {
+			flag = fs.mkdirs(new Path(path));
+		} catch (IOException e) {
 			flag = false;
 			e.printStackTrace();
 		}
 		return flag;
 	}
 
+	/**
+	 * 新建用户根目录
+	 */
+	public void makeDir(String root) {
+		Path path = new Path(Constants.NETPAN_ROOT + root);
+		try {
+			boolean exists = fs.exists(path);
+			if (!exists) {
+				fs.mkdirs(path);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	@Override
-	public HdfsFolder listTree() {
-		return PathUtil.listFolder();
+	public HdfsFolder listTree(String username) {
+		String userRoot = Constants.NETPAN_ROOT + username;
+		return PathUtil.listFolder(userRoot);
 	}
 
 	@Override
 	public boolean copyFile(String src, String dst) {
 		boolean flag = false;
 		try {
-			flag = FileUtil.copy(HdfsConn.getFileSystem(), new Path(src), 
-					HdfsConn.getFileSystem(), new Path(dst), false, HdfsConn.getConfiguration());
-		}  catch (IOException e) {
+			flag = FileUtil.copy(HdfsConn.getFileSystem(), new Path(src), HdfsConn.getFileSystem(), new Path(dst),
+					false, HdfsConn.getConfiguration());
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return flag;
@@ -173,9 +219,9 @@ public class HdfsDaoImpl implements HdfsDao {
 	public boolean moveFile(String src, String dst) {
 		boolean flag = false;
 		try {
-			flag = FileUtil.copy(HdfsConn.getFileSystem(), new Path(src), 
-					HdfsConn.getFileSystem(), new Path(dst), true, HdfsConn.getConfiguration());
-		}  catch (IOException e) {
+			flag = FileUtil.copy(HdfsConn.getFileSystem(), new Path(src), HdfsConn.getFileSystem(), new Path(dst), true,
+					HdfsConn.getConfiguration());
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return flag;
