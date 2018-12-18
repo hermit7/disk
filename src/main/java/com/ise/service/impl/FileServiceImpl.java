@@ -33,8 +33,8 @@ public class FileServiceImpl implements FileService {
 	}
 
 	@Override
-	public boolean uploadFile(InputStream in, String path, String name) {
-		return hdfsDao.uploadFile(in, path, name);
+	public boolean uploadFile(InputStream in, String path, String name, long size) {
+		return hdfsDao.uploadFile(in, path, name, size);
 	}
 
 	@Override

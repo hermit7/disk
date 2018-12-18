@@ -15,7 +15,7 @@ public class UserController {
 	@Autowired
 	private UserDao userDao;
 	
-	@RequestMapping(value = "/isExist")
+	@RequestMapping(value = "/existUser")
 	@ResponseBody
 	public User existUser(String username) {
 		return userDao.existUser(username);

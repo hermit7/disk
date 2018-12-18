@@ -1,10 +1,9 @@
 package com.ise.pojo;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
- * Èº¶ÔÏó
+ * ç¾¤å¯¹è±¡
  * 
  * @author 6
  *
@@ -13,15 +12,13 @@ public class Group implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private String groupName; // ÈºÃû³Æ 
+	private String groupName; // ç¾¤åç§° 
+	
+	private String groupNumber; // ç¾¤åç§° 
 
-	private int groupId; // Èºid Ö÷¼ü
+	private int groupId; // ç¾¤id ä¸»é”®
 
-	private User admin; // ¸ÃÈºµÄ¹ÜÀíÔ±
-
-	private List<User> members; // Èº³ÉÔ±
-
-	private List<HFile> files; // ÈºÀïµÄÎÄ¼şĞÅÏ¢ Ö÷ÒªÊÇÎÄ¼şÃû£¬ÎÄ¼ş´óĞ¡
+	private String owner; // è¯¥ç¾¤çš„ç®¡ç†å‘˜
 
 	public String getGroupName() {
 		return groupName;
@@ -39,27 +36,20 @@ public class Group implements Serializable {
 		this.groupId = groupId;
 	}
 
-	public List<User> getMembers() {
-		return members;
+	public String getGroupNumber() {
+		return groupNumber;
 	}
 
-	public void setMembers(List<User> members) {
-		this.members = members;
+	public void setGroupNumber(String groupNumber) {
+		this.groupNumber = groupNumber;
 	}
 
-	public List<HFile> getFiles() {
-		return files;
+	public String getOwner() {
+		return owner;
 	}
 
-	public void setFiles(List<HFile> files) {
-		this.files = files;
+	public void setOwner(String owner) {
+		this.owner = owner;
 	}
 
-	public User getAdmin() {
-		return admin;
-	}
-
-	public void setAdmin(User admin) {
-		this.admin = admin;
-	}
 }

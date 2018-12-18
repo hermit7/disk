@@ -12,6 +12,7 @@ import com.ise.dao.HdfsDao;
 import com.ise.dao.ShareDao;
 import com.ise.pojo.HFile;
 import com.ise.pojo.User;
+import com.ise.util.GeneralUtil;
 
 @Repository("shareDao")
 public class ShareDaoImpl implements ShareDao {
@@ -23,7 +24,7 @@ public class ShareDaoImpl implements ShareDao {
 	private HdfsDao hdfsDao;
 
 	/**
-	 * ÃÌº”“ª∏ˆ∑÷œÌº«¬º
+	 * Ê∑ªÂä†‰∏Ä‰∏™ÂàÜ‰∫´ËÆ∞ÂΩï
 	 */
 	@Override
 	public boolean addShare(User user, String path, String receiverId, String receiverName) {
@@ -33,46 +34,78 @@ public class ShareDaoImpl implements ShareDao {
 			long rowKey = hbaseDao.incrCounter(Constants.TABLE_GID, Constants.ROWKEY_GID, Constants.FAMILY_GID,
 					Constants.COLUMN_GID, 1);
 			hbaseDao.updateOneData(Constants.SHARE_TABLE, user.getUserId() + "_" + rowKey, Constants.SHARE_FAMILY,
-					Constants.SHARE_COLUMEN[0], rowKey);
+					Constants.SHARE_COLUMN[0], String.valueOf(rowKey));
 			hbaseDao.updateOneData(Constants.SHARE_TABLE, user.getUserId() + "_" + rowKey, Constants.SHARE_FAMILY,
-					Constants.SHARE_COLUMEN[1], "public");
+					Constants.SHARE_COLUMN[1], "public");
 			hbaseDao.updateOneData(Constants.SHARE_TABLE, user.getUserId() + "_" + rowKey, Constants.SHARE_FAMILY,
-					Constants.SHARE_COLUMEN[2], new Date().toString());
+					Constants.SHARE_COLUMN[2], GeneralUtil.formatDate(new Date()));
 			hbaseDao.updateOneData(Constants.SHARE_TABLE, user.getUserId() + "_" + rowKey, Constants.SHARE_FAMILY,
-					Constants.SHARE_COLUMEN[3], path);
+					Constants.SHARE_COLUMN[3], path);
 			hbaseDao.updateOneData(Constants.SHARE_TABLE, user.getUserId() + "_" + rowKey, Constants.SHARE_FAMILY,
-					Constants.SHARE_COLUMEN[4], file.getName());
+					Constants.SHARE_COLUMN[4], file.getName());
 			hbaseDao.updateOneData(Constants.SHARE_TABLE, user.getUserId() + "_" + rowKey, Constants.SHARE_FAMILY,
-					Constants.SHARE_COLUMEN[5], file.getType());
+					Constants.SHARE_COLUMN[5], file.getType());
 			hbaseDao.updateOneData(Constants.SHARE_TABLE, user.getUserId() + "_" + rowKey, Constants.SHARE_FAMILY,
-					Constants.SHARE_COLUMEN[6], file.getSize());
+					Constants.SHARE_COLUMN[6], file.getSize());
 			hbaseDao.updateOneData(Constants.SHARE_TABLE, user.getUserId() + "_" + rowKey, Constants.SHARE_FAMILY,
-					Constants.SHARE_COLUMEN[7], receiverId);
+					Constants.SHARE_COLUMN[7], receiverId);
 			hbaseDao.updateOneData(Constants.SHARE_TABLE, user.getUserId() + "_" + rowKey, Constants.SHARE_FAMILY,
-					Constants.SHARE_COLUMEN[8], receiverName);
+					Constants.SHARE_COLUMN[8], receiverName);
 			hbaseDao.updateOneData(Constants.SHARE_TABLE, user.getUserId() + "_" + rowKey, Constants.SHARE_FAMILY,
-					Constants.SHARE_COLUMEN[9], user.getUserId());
+					Constants.SHARE_COLUMN[9], user.getUserId());
 			hbaseDao.updateOneData(Constants.SHARE_TABLE, user.getUserId() + "_" + rowKey, Constants.SHARE_FAMILY,
-					Constants.SHARE_COLUMEN[10], user.getUsername());
+					Constants.SHARE_COLUMN[10], user.getUsername());
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean addGroupShare(User user, String path, String groupNumber, String groupName) {
+		boolean exist = hdfsDao.isPathExist(path);
+		if (exist) {
+			HFile file = hdfsDao.getFileStatus(path);
+			long rowKey = hbaseDao.incrCounter(Constants.TABLE_GID, Constants.ROWKEY_GID, Constants.FAMILY_GID,
+					Constants.COLUMN_GID, 1);
+			hbaseDao.updateOneData(Constants.GROUP_SHARE_TABLE, groupNumber + "_" + rowKey,
+					Constants.GROUP_SHARE_FAMILY, Constants.GROUP_SHARE_COLUMN[0], String.valueOf(rowKey));
+			hbaseDao.updateOneData(Constants.GROUP_SHARE_TABLE, groupNumber + "_" + rowKey,
+					Constants.GROUP_SHARE_FAMILY, Constants.GROUP_SHARE_COLUMN[1], groupName);
+			hbaseDao.updateOneData(Constants.GROUP_SHARE_TABLE, groupNumber + "_" + rowKey,
+					Constants.GROUP_SHARE_FAMILY, Constants.GROUP_SHARE_COLUMN[2], groupNumber);
+			hbaseDao.updateOneData(Constants.GROUP_SHARE_TABLE, groupNumber + "_" + rowKey,
+					Constants.GROUP_SHARE_FAMILY, Constants.GROUP_SHARE_COLUMN[3], GeneralUtil.formatDate(new Date()));
+			hbaseDao.updateOneData(Constants.GROUP_SHARE_TABLE, groupNumber + "_" + +rowKey,
+					Constants.GROUP_SHARE_FAMILY, Constants.GROUP_SHARE_COLUMN[4], path);
+			hbaseDao.updateOneData(Constants.GROUP_SHARE_TABLE, groupNumber + "_" + +rowKey,
+					Constants.GROUP_SHARE_FAMILY, Constants.GROUP_SHARE_COLUMN[5], file.getName());
+			hbaseDao.updateOneData(Constants.GROUP_SHARE_TABLE, groupNumber + "_" + rowKey,
+					Constants.GROUP_SHARE_FAMILY, Constants.GROUP_SHARE_COLUMN[6], file.getType());
+			hbaseDao.updateOneData(Constants.GROUP_SHARE_TABLE, groupNumber + "_" + rowKey,
+					Constants.GROUP_SHARE_FAMILY, Constants.GROUP_SHARE_COLUMN[7], file.getSize());
+			hbaseDao.updateOneData(Constants.GROUP_SHARE_TABLE, groupNumber + "_" + rowKey,
+					Constants.GROUP_SHARE_FAMILY, Constants.GROUP_SHARE_COLUMN[8], user.getUserId());
+			hbaseDao.updateOneData(Constants.GROUP_SHARE_TABLE, groupNumber + "_" + rowKey,
+					Constants.GROUP_SHARE_FAMILY, Constants.GROUP_SHARE_COLUMN[9], user.getUsername());
 			return true;
 		}
 		return false;
 	}
 
 	/**
-	 * “‘“ª∂®πÊ‘Ú…®√Ëshare±Ì
+	 * ‰ª•‰∏ÄÂÆöËßÑÂàôÊâ´ÊèèshareË°®
 	 */
 	@Override
-	public ResultScanner getResultScannerByShare(Filter filter) {
-		return hbaseDao.getResultScannerByFilter(Constants.SHARE_TABLE, filter);
+	public ResultScanner getResultScannerByFilter(String tableName, Filter filter) {
+		return hbaseDao.getResultScannerByFilter(tableName, filter);
 	}
 
 	/**
-	 * …æ≥˝Œ“µƒ∑÷œÌ
+	 * Âà†Èô§ÊàëÁöÑÂàÜ‰∫´
 	 */
 	@Override
-	public boolean deleteShare(String rowKey) {
-		return hbaseDao.deleteDataByRow(Constants.SHARE_TABLE, rowKey);
+	public boolean deleteShare(String tableName, String rowKey) {
+		return hbaseDao.deleteDataByRow(tableName, rowKey);
 	}
 
 }

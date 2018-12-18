@@ -1,16 +1,13 @@
-package com.redis.test;
-
+﻿package com.redis.test;
 
 import redis.clients.jedis.Jedis;
 
 public class RedisTest {
 	public static void main(String[] args) {
-		String str = "192.168.137.30";
-		@SuppressWarnings("resource")
-		Jedis jedis = new Jedis(str);
-		jedis.auth("123456");
-		jedis.set("hello", "world");
-		String result = jedis.get("hello");
-		System.out.println(result);
+		//连接本地的 Redis 服务
+        Jedis jedis = new Jedis("192.168.137.30");
+        System.out.println("连接成功");
+        //查看服务是否运行
+        System.out.println("服务正在运行: "+jedis.ping());
 	}
 }

@@ -32,14 +32,15 @@ public class FileController {
 	private FileService fileService;
 
 	@RequestMapping("/list")
-	public String listFiles(HttpSession session,@RequestParam(value = "path", defaultValue = "/disk/") String path, Model model) {
+	public String listFiles(HttpSession session, @RequestParam(value = "path", defaultValue = "/disk/") String path,
+			Model model) {
 		try {
 			path = URLDecoder.decode(path, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
 		User user = (User) session.getAttribute("user");
-		if("/disk/".equals(path)) {
+		if ("/disk/".equals(path)) {
 			path = path + user.getUsername();
 		}
 		List<HFile> files = fileService.listFiles(path);
@@ -47,7 +48,7 @@ public class FileController {
 		model.addAttribute("fileList", files);
 		model.addAttribute("breadlist", breads);
 		model.addAttribute("currentPath", path);
-		// System.out.println("µ±Ç°Â·¾¶:"+path);
+		// System.out.println("å½“å‰è·¯å¾„:"+path);
 		return "/jsp/filelist.jsp";
 	}
 
@@ -59,12 +60,13 @@ public class FileController {
 		if (file == null) {
 			System.out.println("file is empty");
 		}
-		// System.out.println("ÉÏ´«Â·¾¶:"+ curPath);
+		// System.out.println("ä¸Šä¼ è·¯å¾„:"+ curPath);
+		long size = file.getSize() / 65536;
 		String name = file.getOriginalFilename();
-		// System.out.println("ÎÄ¼şÃû:"+name);
+		// System.out.println("æ–‡ä»¶å:"+name);
 		try {
 			curPath = URLDecoder.decode(curPath, "UTF-8");
-			flag = fileService.uploadFile(file.getInputStream(), curPath, name);
+			flag = fileService.uploadFile(file.getInputStream(), curPath, name, size);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -98,9 +100,9 @@ public class FileController {
 	/***
 	 * 
 	 * @param model
-	 * @param originName ÎÄ¼şÃû
-	 * @param curPath    curPath/originName Ô­Â·¾¶
-	 * @param motion     ÒªÖ´ĞĞµÄ²Ù×÷ ÒÆ¶¯»¹ÊÇ¸¨Öú
+	 * @param originName æ–‡ä»¶å
+	 * @param curPath    curPath/originName åŸè·¯å¾„
+	 * @param motion     è¦æ‰§è¡Œçš„æ“ä½œ ç§»åŠ¨è¿˜æ˜¯è¾…åŠ©
 	 * @return
 	 */
 	@RequestMapping(value = "/dirTree")
@@ -111,7 +113,7 @@ public class FileController {
 			model.addAttribute("originName", originName);
 			model.addAttribute("curPath", curPath);
 			model.addAttribute("motion", motion);
-			//System.out.println(originName + " " + curPath + " " + motion);
+			// System.out.println(originName + " " + curPath + " " + motion);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
@@ -122,7 +124,7 @@ public class FileController {
 	@ResponseBody
 	public List<HdfsFolder> showDirTree(HttpSession session) {
 		List<HdfsFolder> list = new ArrayList<>();
-		User user = (User)session.getAttribute("user");
+		User user = (User) session.getAttribute("user");
 		list.add(fileService.showDirTree(user.getUsername()));
 		return list;
 	}
@@ -131,7 +133,7 @@ public class FileController {
 	@ResponseBody
 	public boolean moveFile(String originName, String curPath, @RequestParam(defaultValue = "/") String dst,
 			String motion) {
-		//System.out.println("ÒÆ¶¯ÎÄ¼ş" + originName + " " + curPath + " " + motion);
+		// System.out.println("ç§»åŠ¨æ–‡ä»¶" + originName + " " + curPath + " " + motion);
 		String src = PathUtil.formatPath(curPath, originName);
 		return fileService.moveFile(src, dst, motion);
 	}

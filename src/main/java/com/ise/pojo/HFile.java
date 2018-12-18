@@ -2,7 +2,7 @@ package com.ise.pojo;
 
 import java.io.Serializable;
 /**
- * ÎÄ¼ş¶ÔÏó
+ * æ–‡ä»¶å¯¹è±¡
  * @author 6
  *
  */
@@ -11,8 +11,8 @@ public class HFile implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private String name;
 	private String time;
-	private String type; // ¸ÃÎÄ¼şµÄÀàĞÍ ÎÄ¼ş¼Ğ Ñ¹ËõÎÄ¼ş Í¼Æ¬£¿
-	private String path; // ¸ÃÎÄ¼şµÄÂ·¾¶
+	private String type; // è¯¥æ–‡ä»¶çš„ç±»å‹ æ–‡ä»¶å¤¹ å‹ç¼©æ–‡ä»¶ å›¾ç‰‡ï¼Ÿ
+	private String path; // è¯¥æ–‡ä»¶çš„è·¯å¾„
 	
 	public String getPath() {
 		return path;

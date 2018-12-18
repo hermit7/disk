@@ -17,13 +17,21 @@
 <body>
 	<input type="hidden" id="path" value="${path}">
 	<div class="container">
-		<p>好友</p>
+		<p>用户</p>
 		<div class="combobox" style="padding: 5px; height: auto">
-			<input id="cc" class="easyui-combobox" value="请选择">
+			<input id="cc" class="easyui-combobox">
 		</div>
 		<div>
-			<input type="button" value="确认" onclick="affirm()">&nbsp; <input
-				type="button" value="关闭" onclick="cancel()">
+			<input type="button" value="确认" onclick="addMemberShare()">&nbsp;
+			<input type="button" value="关闭" onclick="cancel()">
+		</div>
+		<p>群</p>
+		<div class="combobox" style="padding: 5px; height: auto">
+			<input id="gg" class="easyui-combobox">
+		</div>
+		<div>
+			<input type="button" value="确认" onclick="addGroupShare()">&nbsp;
+			<input type="button" value="关闭" onclick="cancel()">
 		</div>
 	</div>
 	<script type="text/javascript">
@@ -33,9 +41,15 @@
 				valueField : 'id',
 				textField : 'text'
 			});
+
+			$('#gg').combobox({
+				url : '${basePath}/relation/showGroups.action',
+				valueField : 'id',
+				textField : 'text'
+			});
 		});
 
-		function affirm() {
+		function addMemberShare() {
 			var receiverId = $('#cc').combobox('getValue');//下拉框的取Value方法
 			var receiverName = $('#cc').combobox('getText');//下拉框的去Text方法 
 			/* if (receiverId == "") {
@@ -47,7 +61,7 @@
 			console.log(path);
 			//然后执行addShare操作
 			$.ajax({
-				url : "${basePath}/share/addShare.action",
+				url : "${basePath}/share/addMemberShare.action",
 				type : "POST",
 				data : {
 					"path" : path,
@@ -65,13 +79,45 @@
 					}
 				},
 			});
-			$('#dd', window.parent.document).dialog('close'); 
+			$('#dd', window.parent.document).dialog('close');
+		}
+		
+		function addGroupShare() {
+			var groupNumber = $('#gg').combobox('getValue');//下拉框的取Value方法
+			var groupName = $('#gg').combobox('getText');//下拉框的去Text方法 
+			/* if (receiverId == "") {
+				alert("请选择一个用户");
+			} */
+			var path = $("#path").val(); 
+			console.log(groupNumber);
+			console.log(groupName);
+			console.log(path);
+			//然后执行addShare操作
+			$.ajax({
+				url : "${basePath}/share/addGroupShare.action",
+				type : "POST",
+				data : {
+					"path" : path,
+					"groupNumber" : groupNumber,
+					"groupName" : groupName
+				},
+				success : function(data) {
+					if (data) {
+						$.messager.show({
+							title : 'tip',
+							msg : '操作成功',
+							timeout : 1000,
+							showType : 'slide'
+						});
+					}
+				},
+			});
+			$('#dd', window.parent.document).dialog('close');
 		}
 
 		function cancel() {
 			$('#dd', window.parent.document).dialog('close');
 		}
-
 	</script>
 </body>
 </html>

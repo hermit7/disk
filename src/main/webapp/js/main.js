@@ -45,7 +45,7 @@
 		} , { offset: '85%' } );
 	};
 	// On load
-	$(function(){
+	;(function(){
 		placeholderFunction();
 		contentWayPoint();
 

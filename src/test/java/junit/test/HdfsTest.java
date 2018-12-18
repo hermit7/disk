@@ -30,6 +30,7 @@ public class HdfsTest {
 		fs = FileSystem.get(new URI("hdfs://192.168.137.30:9000/"), conf, "root");
 	}
 
+	
 	@Test
 	public void listFiles() {
 		JsonArray array = new JsonArray();
@@ -40,7 +41,7 @@ public class HdfsTest {
 			FileStatus[] listStatus = fs.listStatus(new Path("hdfs://192.168.137.30:9000/"));
 			for (FileStatus file : listStatus) {
 				JsonObject tmp = new JsonObject();
-				System.out.println("ÎÄ¼þÂ·¾¶" + file.getPath());
+				System.out.println("ï¿½Ä¼ï¿½Â·ï¿½ï¿½" + file.getPath());
 				String name = file.getPath().getName();
 				if (file.isDirectory()) {
 					tmp.addProperty(name, "dir");

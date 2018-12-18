@@ -20,27 +20,27 @@ public class LoginController {
 	public String login(HttpSession session, String username, String password, Model model) {
 		User user = userService.existUser(username, password);
 		if (user == null) {
-			model.addAttribute("msg", "ÕËºÅ»òÃÜÂëÊäÈë²»ÕıÈ·");
+			model.addAttribute("msg", "è´¦å·æˆ–å¯†ç è¾“å…¥ä¸æ­£ç¡®");
 			return "/login.html";
 		}
 		session.setAttribute("user", user);
-		//´Ë²½Ó¦¸ÃÔÚ×¢²áÊ±Ê¹ÓÃ
+		//æ­¤æ­¥åº”è¯¥åœ¨æ³¨å†Œæ—¶ä½¿ç”¨
 		userService.makeUserRoot(user.getUsername());
 		return "redirect:/jsp/index.jsp";
 	}
 
-	@RequestMapping("/index")
+	@RequestMapping("/main")
 	public String index() {
-		return "/jsp/index.jsp";
+		return "/login.html";
 	}
 
 	@RequestMapping("/register")
 	public String register(String email, String username, String password) {
-		// ÏòÊı¾İ¿â×¢²á´ËÓÃ»§
-		// 1¡¢ÅĞ¶ÏÓÊÏäÊÇ·ñ×¢²á
-		// 2¡¢ÅĞ¶ÏÓÃ»§ÃûÊÇ·ñÒÑ¾­´æÔÚ Èô²»´æÔÚ£¬Îª¸ÃÓÃ»§Éú³É¸ùÄ¿Â¼
-		// 3¡¢¶ÔÃÜÂë½øĞĞMD5¼ÓÃÜ
-		return "/login.jsp";
+		// å‘æ•°æ®åº“æ³¨å†Œæ­¤ç”¨æˆ·
+		// 1ã€åˆ¤æ–­é‚®ç®±æ˜¯å¦æ³¨å†Œ
+		// 2ã€åˆ¤æ–­ç”¨æˆ·åæ˜¯å¦å·²ç»å­˜åœ¨ è‹¥ä¸å­˜åœ¨ï¼Œä¸ºè¯¥ç”¨æˆ·ç”Ÿæˆæ ¹ç›®å½•
+		// 3ã€å¯¹å¯†ç è¿›è¡ŒMD5åŠ å¯†
+		return "/login.html";
 	}
 
 }

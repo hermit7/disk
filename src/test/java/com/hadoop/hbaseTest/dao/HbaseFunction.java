@@ -1,4 +1,4 @@
-package com.hadoop.hbaseTest.dao;
+ï»¿package com.hadoop.hbaseTest.dao;
 
 import static org.apache.hadoop.hbase.util.Bytes.toBytes;
 
@@ -32,22 +32,22 @@ public class HbaseFunction {
 		func.queryTable();
 	}
 
-	// ´´½¨±í
+	// åˆ›å»ºè¡¨
 	public void createTable() {
-		// ´´½¨±íÃèÊöÆ÷
+		// åˆ›å»ºè¡¨æè¿°å™¨
 		TableName tableName = TableName.valueOf("user");
 		ModifyableTableDescriptor tableDescriptor = new TableDescriptorBuilder.ModifyableTableDescriptor(tableName);
 
-		// ´´½¨ÁĞ×åÃèÊöÆ÷
+		// åˆ›å»ºåˆ—æ—æè¿°å™¨
 		ModifyableColumnFamilyDescriptor familyDescriptor = new ColumnFamilyDescriptorBuilder.ModifyableColumnFamilyDescriptor(
 				toBytes("info"));
 
-		// Ôö¼ÓÁĞ×å
+		// å¢åŠ åˆ—æ—
 		tableDescriptor.setColumnFamily(familyDescriptor);
 
-		// ´´½¨±í
+		// åˆ›å»ºè¡¨
 		try {
-			// Èç¹û±í²»´æÔÚ£¬´´½¨±í
+			// å¦‚æœè¡¨ä¸å­˜åœ¨ï¼Œåˆ›å»ºè¡¨
 			if (!admin.tableExists(tableName)) {
 				admin.createTable(tableDescriptor);
 			}
@@ -57,24 +57,24 @@ public class HbaseFunction {
 		}
 	}
 
-	// É¾³ı±í
+	// åˆ é™¤è¡¨
 
-	// ²éÑ¯
+	// æŸ¥è¯¢
 	/**
-	 * ĞèÇó£º 1¡¢¸ù¾İÓÃ»§Ãû²éÑ¯¸ÃÓÃ»§ÊÇ·ñ´æÔÚ 2¡¢¸ù¾İÓÃ»§Ãû²éÑ¯¸ÃÓÃ»§µÄ¹«¿ªĞÅÏ¢ 3¡¢¸ù¾İÈºID²éÑ¯¸ÃÈºµÄËùÓĞ³ÉÔ±
+	 * éœ€æ±‚ï¼š 1ã€æ ¹æ®ç”¨æˆ·åæŸ¥è¯¢è¯¥ç”¨æˆ·æ˜¯å¦å­˜åœ¨ 2ã€æ ¹æ®ç”¨æˆ·åæŸ¥è¯¢è¯¥ç”¨æˆ·çš„å…¬å¼€ä¿¡æ¯ 3ã€æ ¹æ®ç¾¤IDæŸ¥è¯¢è¯¥ç¾¤çš„æ‰€æœ‰æˆå‘˜
 	 */
 	public void queryTable() {
 		TableName tb = TableName.valueOf("user");
 		try {
 			Table table = conn.getTable(tb);
-			// 3¡¢»ñÈ¡Êı¾İ
+			// 3ã€è·å–æ•°æ®
 			Get g = new Get(toBytes("rk001"));
-			// »ñÈ¡Ö¸¶¨ÁĞ´ØÏÂËùÓĞÁĞ
+			// è·å–æŒ‡å®šåˆ—ç°‡ä¸‹æ‰€æœ‰åˆ—
 			g.addFamily(Bytes.toBytes("info"));
-			// »ñÈ¡Ö¸¶¨ÁĞ´ØÏÂÖ¸¶¨ÁĞ
+			// è·å–æŒ‡å®šåˆ—ç°‡ä¸‹æŒ‡å®šåˆ—
 			//g.addColumn(Bytes.toBytes("personal"), Bytes.toBytes("salary"));
 
-			// »ñÈ¡½á¹û¼¯
+			// è·å–ç»“æœé›†
 			Result rs = table.get(g);
 
 			 byte[] value = rs.getValue(Bytes.toBytes("info"), Bytes.toBytes("friends"));
@@ -86,60 +86,60 @@ public class HbaseFunction {
 		}
 	}
 
-	// ĞŞ¸Ä
+	// ä¿®æ”¹
 	/**
-	 * ĞèÇó 1¡¢ÓÃ»§Ìí¼Ó/É¾³ıºÃÓÑ 2¡¢ÓÃ»§¼ÓÈº/ÍËÈº 3¡¢ÓÃ»§±»ÒÆ³ıÈº 4¡¢ÏòÈºÌí¼Ó/ÒÆ³ıÎÄ¼ş
+	 * éœ€æ±‚ 1ã€ç”¨æˆ·æ·»åŠ /åˆ é™¤å¥½å‹ 2ã€ç”¨æˆ·åŠ ç¾¤/é€€ç¾¤ 3ã€ç”¨æˆ·è¢«ç§»é™¤ç¾¤ 4ã€å‘ç¾¤æ·»åŠ /ç§»é™¤æ–‡ä»¶
 	 */
 
-	// ²åÈë
+	// æ’å…¥
 	/**
-	 * ĞèÇó£º 1¡¢ÏòÓÃ»§±íÖĞ²åÈëÒ»ÌõÊı¾İ 2¡¢ÏòÈº×é±íÖĞ²åÈëÒ»ÌõÊı¾İ
+	 * éœ€æ±‚ï¼š 1ã€å‘ç”¨æˆ·è¡¨ä¸­æ’å…¥ä¸€æ¡æ•°æ® 2ã€å‘ç¾¤ç»„è¡¨ä¸­æ’å…¥ä¸€æ¡æ•°æ®
 	 */
 	public void function() {
 		try {
-			// ´´½¨±íÃèÊöÆ÷
+			// åˆ›å»ºè¡¨æè¿°å™¨
 			ModifyableTableDescriptor tableDescriptor = new TableDescriptorBuilder.ModifyableTableDescriptor(
 					TableName.valueOf("testHbase2"));
 
-			// ´´½¨ÁĞ×åÃèÊöÆ÷
+			// åˆ›å»ºåˆ—æ—æè¿°å™¨
 			ModifyableColumnFamilyDescriptor familyDescriptor = new ColumnFamilyDescriptorBuilder.ModifyableColumnFamilyDescriptor(
 					toBytes("columnfamily2"));
 
-			// Ôö¼ÓÁĞ×å
+			// å¢åŠ åˆ—æ—
 			tableDescriptor.setColumnFamily(familyDescriptor);
 
-			// ´´½¨±í
+			// åˆ›å»ºè¡¨
 			admin.createTable(tableDescriptor);
 
-			// »ñÈ¡ËùÓĞ±íÃ÷
+			// è·å–æ‰€æœ‰è¡¨æ˜
 			TableName[] tableNames = admin.listTableNames();
 			TableName tb = tableNames[0];
 
-			// ÅĞ¶ÏtbÊÇ·ñÆôÓÃ
-			// ½ûÓÃ±ítb
+			// åˆ¤æ–­tbæ˜¯å¦å¯ç”¨
+			// ç¦ç”¨è¡¨tb
 			if (admin.isTableEnabled(tb)) {
 				admin.disableTable(tb);
 			}
-			// ÆôÓÃ±í
+			// å¯ç”¨è¡¨
 			if (!admin.isTableEnabled(tb)) {
 				admin.enableTable(tb);
 			}
 
-			// ÁĞĞÅÏ¢
+			// åˆ—ä¿¡æ¯
 			ModifyableColumnFamilyDescriptor columnFamilyDescriptor = new ColumnFamilyDescriptorBuilder.ModifyableColumnFamilyDescriptor(
 					toBytes("column12"));
 
-			// Ö¸¶¨Ä³ÁĞ×î´ó°æ±¾ºÅ
+			// æŒ‡å®šæŸåˆ—æœ€å¤§ç‰ˆæœ¬å·
 			columnFamilyDescriptor.setMaxVersions(9);
-			// Ö¸¶¨Ä³ÁĞµ±Ç°°æ±¾¼°×î´ó°æ±¾
+			// æŒ‡å®šæŸåˆ—å½“å‰ç‰ˆæœ¬åŠæœ€å¤§ç‰ˆæœ¬
 			columnFamilyDescriptor.setVersions(1, 9);
 
-			// Ìí¼ÓÁĞ´Ø
+			// æ·»åŠ åˆ—ç°‡
 			admin.addColumnFamily(tb, columnFamilyDescriptor);
 
-			// ÅĞ¶Ï±íÊÇ·ñ´æÔÚ
+			// åˆ¤æ–­è¡¨æ˜¯å¦å­˜åœ¨
 			if (admin.tableExists(tb)) {
-				// É¾³ı±í
+				// åˆ é™¤è¡¨
 				admin.deleteTable(tb);
 			}
 
@@ -147,10 +147,10 @@ public class HbaseFunction {
 				System.out.println(tableName);
 			}
 
-			// ¿Í»§¶Ëapi£ºtable
+			// å®¢æˆ·ç«¯apiï¼štable
 			Table table = conn.getTable(tb);
 
-			// 1¡¢ĞÂÔöÁĞ´ØÊı¾İ
+			// 1ã€æ–°å¢åˆ—ç°‡æ•°æ®
 			Put p = new Put(Bytes.toBytes("row1"));
 			p.addColumn(Bytes.toBytes("personal"), Bytes.toBytes("name"), Bytes.toBytes("raju"));
 			p.addColumn(Bytes.toBytes("personal"), Bytes.toBytes("city"), Bytes.toBytes("hyderabad"));
@@ -159,18 +159,18 @@ public class HbaseFunction {
 
 			table.put(p);
 
-			// 2¡¢¸üĞÂÁĞ´Ø
+			// 2ã€æ›´æ–°åˆ—ç°‡
 			p.addColumn(Bytes.toBytes("personal"), Bytes.toBytes("city"), Bytes.toBytes("Delih"));
 			table.put(p);
 
-			// 3¡¢»ñÈ¡Êı¾İ
+			// 3ã€è·å–æ•°æ®
 			Get g = new Get(toBytes("row1"));
-			// »ñÈ¡Ö¸¶¨ÁĞ´ØÏÂËùÓĞÁĞ
+			// è·å–æŒ‡å®šåˆ—ç°‡ä¸‹æ‰€æœ‰åˆ—
 			g.addFamily(Bytes.toBytes("personal"));
-			// »ñÈ¡Ö¸¶¨ÁĞ´ØÏÂÖ¸¶¨ÁĞ
+			// è·å–æŒ‡å®šåˆ—ç°‡ä¸‹æŒ‡å®šåˆ—
 			g.addColumn(Bytes.toBytes("personal"), Bytes.toBytes("salary"));
 
-			// »ñÈ¡½á¹û¼¯
+			// è·å–ç»“æœé›†
 			// Result rs = table.get(g);
 
 			// byte[] value = rs.getValue(Bytes.toBytes("personal"), Bytes.toBytes("name"));
@@ -178,30 +178,30 @@ public class HbaseFunction {
 			// byte[] value1 = rs.getValue(Bytes.toBytes("personal"),
 			// Bytes.toBytes("city"));
 
-			// 4¡¢ É¾³ıÊı¾İ
+			// 4ã€ åˆ é™¤æ•°æ®
 
 			Delete d = new Delete(toBytes("row1"));
 			d.addColumn(Bytes.toBytes("personal"), Bytes.toBytes("salary"));
 			table.delete(d);
 
-			// 5¡¢ É¨Ãè
+			// 5ã€ æ‰«æ
 			Scan scan = new Scan();
-			// É¨ÃèÖ¸¶¨ÁĞ
+			// æ‰«ææŒ‡å®šåˆ—
 			scan.addColumn(Bytes.toBytes("personal"), Bytes.toBytes("city"));
 
-			// É¨ÃèÖ¸¶¨ÁĞ´Ø
+			// æ‰«ææŒ‡å®šåˆ—ç°‡
 			scan.addFamily(Bytes.toBytes("personal"));
 
-			// É¨Ãè½á¹û¼¯
+			// æ‰«æç»“æœé›†
 			ResultScanner resultScanner = table.getScanner(scan);
 
-			// µü´ú½á¹û
+			// è¿­ä»£ç»“æœ
 			resultScanner.iterator();
 
-			// ¹Ø±ÕHtable
+			// å…³é—­Htable
 			table.close();
 
-			// Í£Ö¹hbase
+			// åœæ­¢hbase
 			admin.shutdown();
 
 		} catch (IOException e) {

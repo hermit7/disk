@@ -96,14 +96,14 @@
 
 	<div class="tip">
 		<div class="tiptop">
-			<span>寻找用户</span>
+			<span>找用户</span>
 		</div>
 		<form id="fileForm" method="POST">
 			<div class="tipinfo">
 				<div class="tipright">
 					<!-- <p>找好友</p> -->
 					<input id="searchUser" type="text" name="username"
-						style="height: 30px; position: center" placeholder="请输入用户名"><br>
+						style="height: 30px; position: center" placeholder="请输入用户名或其ID"><br>
 					<input id="followId" type="hidden"><br> <span
 						id="useralert"></span>
 				</div>
@@ -117,23 +117,26 @@
 	</div>
 
 	<script type="text/javascript">
-		$("#searchUser").on("blur", function() {
-			var username = $("#searchUser").val();
-			console.log(username);
-			$.ajax({
-				url : "${basePath}/user/isExist.action",
-				type : "POST",
-				data : {
-					"username" : username
-				},
-				success : function(data) {
-					if (data != null) {
-						$("#followId").val(data.userId);
-						$("#useralert").html("用户存在");
-					} else {
-						$("#useralert").html("用户不存在，请输入其他用户名");
+		$(function(){
+			$("#searchUser").on("blur", function() {
+				var username = $("#searchUser").val();
+				console.log(username);
+				$.ajax({
+					url : "${basePath}/user/existUser.action",
+					type : "POST",
+					data : {
+						"username" : username
+					},
+					success : function(data) {
+						if (null != data && "" != data) {
+							$("#followId").val(data.userId);
+							console.log(data);
+							$("#useralert").html("用户存在");
+						} else {
+							$("#useralert").html("用户不存在，请输入其他用户名");
+						}
 					}
-				}
+				});
 			});
 		});
 	</script>

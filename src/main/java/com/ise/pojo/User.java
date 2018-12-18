@@ -1,75 +1,71 @@
 package com.ise.pojo;
 
 import java.io.Serializable;
-import java.util.List;
+
 /**
- * ÓÃ»§
+ * ç”¨æˆ·
+ * 
  * @author 6
  *
  */
-public class User implements Serializable{
+public class User implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private String username; // ÓÃ»§Ãû Î¨Ò»Ô¼Êø ÓÃÀ´´æ·ÅÓÃ»§ÎÄ¼ş¸ùÄ¿Â¼
-	private String userId; // ÓÃ»§ID ·½±ãÍâ²¿ÒıÓÃ  Ö÷¼ü
-	private String pasword;  // ÃÜÂë
-	private String space; // ÓÃ»§¿Õ¼ä
-	private String type; // ÓÃ»§ÀàĞÍ ÆÕÍ¨ÓÃ»§ ¡¢¹ÜÀíÔ±
-	
-	private String nickname; //±¸×¢
-	private List<Group> groups; // ¸ÃÓÃ»§ÔÚµÄÈº ´æÈºid
-	private List<User> friends; // ¸ÃÓÃ»§ËùÓµÓĞµÄºÃÓÑ ´æÓÃ»§id
-	
-	
+	private String username; // ç”¨æˆ·å å”¯ä¸€çº¦æŸ ç”¨æ¥å­˜æ”¾ç”¨æˆ·æ–‡ä»¶æ ¹ç›®å½•
+	private String userId; // ç”¨æˆ·ID æ–¹ä¾¿å¤–éƒ¨å¼•ç”¨ ä¸»é”®
+	private String pasword; // å¯†ç 
+	private String space; // ç”¨æˆ·ç©ºé—´
+	private String type; // ç”¨æˆ·ç±»å‹ æ™®é€šç”¨æˆ· ã€ç®¡ç†å‘˜
+
+	private String nickname; // å¤‡æ³¨
+
 	public String getNickname() {
 		return nickname;
 	}
+
 	public void setNickname(String nickname) {
 		this.nickname = nickname;
 	}
-	public List<Group> getGroups() {
-		return groups;
-	}
-	public void setGroups(List<Group> groups) {
-		this.groups = groups;
-	}
-	public List<User> getFriends() {
-		return friends;
-	}
-	public void setFriends(List<User> friends) {
-		this.friends = friends;
-	}
+
 	public String getUsername() {
 		return username;
 	}
+
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	
+
 	public String getUserId() {
 		return userId;
 	}
+
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
+
 	public String getPasword() {
 		return pasword;
 	}
+
 	public void setPasword(String pasword) {
 		this.pasword = pasword;
 	}
+
 	public String getSpace() {
 		return space;
 	}
+
 	public void setSpace(String space) {
 		this.space = space;
 	}
+
 	public String getType() {
 		return type;
 	}
+
 	public void setType(String type) {
 		this.type = type;
 	}
-	
+
 }

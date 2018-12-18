@@ -10,8 +10,10 @@ public interface ShareDao {
 
 	boolean addShare(User user, String path, String receiveId, String receiveName);
 
-	ResultScanner getResultScannerByShare(Filter filter);
+	public ResultScanner getResultScannerByFilter(String tableName,Filter filter);
 
-	boolean deleteShare(String rowKey);
+	public boolean deleteShare(String tableName,String rowKey);
+
+	boolean addGroupShare(User user, String path, String groupNumber, String groupName);
 
 }

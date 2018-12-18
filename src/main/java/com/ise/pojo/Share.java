@@ -6,20 +6,20 @@ public class Share implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private String shareId; // ´Ë·ÖÏíµÄid
-	private String shareType; // ·ÖÏíÀàĞÍ £¨¹«¿ª·ÖÏí/Ë½ÃÜ·ÖÏí£©
-	private String shareTime; // ·ÖÏíÊ±¼ä
+	private String shareId; // æ­¤åˆ†äº«çš„id
+	private String shareType; // åˆ†äº«ç±»å‹ ï¼ˆå…¬å¼€åˆ†äº«/ç§å¯†åˆ†äº«ï¼‰
+	private String shareTime; // åˆ†äº«æ—¶é—´
 
-	private String filePath; // ·ÖÏíÎÄ¼şÂ·¾¶
-	private String fileName; // ·ÖÏíÎÄ¼şÃû
+	private String filePath; // åˆ†äº«æ–‡ä»¶è·¯å¾„
+	private String fileName; // åˆ†äº«æ–‡ä»¶å
 	private String fileType;
 	private String fileSize;
 	
-	private String receiverId; // ½ÓÊÕÕßid
-	private String receiverName; // ½ÓÊÕÕßname
+	private String receiverId; // æ¥æ”¶è€…id
+	private String receiverName; // æ¥æ”¶è€…name
 	
-	private String providerId; //Ìá¹©Õßid
-	private String providerName; //Ìá¹©Õßname
+	private String providerId; //æä¾›è€…id
+	private String providerName; //æä¾›è€…name
 	
 	
 	

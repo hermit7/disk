@@ -1,4 +1,4 @@
-package com.hadoop.hbaseTest.util;
+﻿package com.hadoop.hbaseTest.util;
 
 import java.io.IOException;
 

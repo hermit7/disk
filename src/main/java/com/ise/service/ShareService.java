@@ -15,4 +15,10 @@ public interface ShareService {
 	List<Share> listReceivedShare(User user);
 
 	boolean saveShare(String path, String dst);
+
+	boolean addGroupShare(User user, String path, String groupNumber, String groupName);
+
+	List<Share> listGroupShare(String groupNumber);
+
+	boolean deleteGroupShare(String groupNumber, String shareId);
 }

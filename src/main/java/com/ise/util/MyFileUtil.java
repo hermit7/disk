@@ -10,70 +10,70 @@ public class MyFileUtil {
 
 	static Map<String, String> map = new HashMap<>();
 	static {
-		// Í¼Æ¬ picture
+		// å›¾ç‰‡ picture
 		map.put("jpg", "p");
 		map.put("png", "p");
 		map.put("jpeg", "p");
 		map.put("bmp", "p");
 		map.put("gif", "p");
-		// ÊÓÆµ video
+		// è§†é¢‘ video
 		map.put("avi", "v");
 		map.put("mtv", "v");
 		map.put("mp4", "v");
 		map.put("flv", "v");
 		map.put("rmvb", "v");
 
-		// Ñ¹ËõÎÄ¼ş compress
+		// å‹ç¼©æ–‡ä»¶ compress
 		map.put("zip", "z");
 		map.put("gz", "z");
 		map.put("rar", "z");
 		map.put("7z", "z");
 
-		// ÎÄµµ document
+		// æ–‡æ¡£ document
 		map.put("txt", "t");
 		map.put("pdf", "t");
 		map.put("ppt", "t");
 		map.put("doc", "t");
 		map.put("docx", "t");
 		map.put("chm", "t");
-		// ÒôÀÖ music
+		// éŸ³ä¹ music
 		map.put("mp3", "m");
 		map.put("wma", "m");
 		map.put("wav", "m");
-		// ÆäËû other
+		// å…¶ä»– other
 	}
 
 	public static String fileSizeFormat(long size) {
 		if (size == 0) {
 			return "-";
 		}
-		// Èç¹û×Ö½ÚÊıÉÙÓÚ1024£¬ÔòÖ±½ÓÒÔBÎªµ¥Î»£¬·ñÔòÏÈ³ıÓÚ1024£¬ºó3Î»ÒòÌ«ÉÙÎŞÒâÒå
+		// å¦‚æœå­—èŠ‚æ•°å°‘äº1024ï¼Œåˆ™ç›´æ¥ä»¥Bä¸ºå•ä½ï¼Œå¦åˆ™å…ˆé™¤äº1024ï¼Œå3ä½å› å¤ªå°‘æ— æ„ä¹‰
 		if (size < 1024) {
 			return String.valueOf(size) + "B";
 		} else {
 			size = size / 1024;
 		}
-		// Èç¹ûÔ­×Ö½ÚÊı³ıÓÚ1024Ö®ºó£¬ÉÙÓÚ1024£¬Ôò¿ÉÒÔÖ±½ÓÒÔKB×÷Îªµ¥Î»
-		// ÒòÎª»¹Ã»ÓĞµ½´ïÒªÊ¹ÓÃÁíÒ»¸öµ¥Î»µÄÊ±ºò
-		// ½ÓÏÂÈ¥ÒÔ´ËÀàÍÆ
+		// å¦‚æœåŸå­—èŠ‚æ•°é™¤äº1024ä¹‹åï¼Œå°‘äº1024ï¼Œåˆ™å¯ä»¥ç›´æ¥ä»¥KBä½œä¸ºå•ä½
+		// å› ä¸ºè¿˜æ²¡æœ‰åˆ°è¾¾è¦ä½¿ç”¨å¦ä¸€ä¸ªå•ä½çš„æ—¶å€™
+		// æ¥ä¸‹å»ä»¥æ­¤ç±»æ¨
 		if (size < 1024) {
 			return String.valueOf(size) + "KB";
 		} else {
 			size = size / 1024;
 		}
 		if (size < 1024) {
-			// ÒòÎªÈç¹ûÒÔMBÎªµ¥Î»µÄ»°£¬Òª±£Áô×îºó1Î»Ğ¡Êı£¬
-			// Òò´Ë£¬°Ñ´ËÊı³ËÒÔ100Ö®ºóÔÙÈ¡Óà
+			// å› ä¸ºå¦‚æœä»¥MBä¸ºå•ä½çš„è¯ï¼Œè¦ä¿ç•™æœ€å1ä½å°æ•°ï¼Œ
+			// å› æ­¤ï¼ŒæŠŠæ­¤æ•°ä¹˜ä»¥100ä¹‹åå†å–ä½™
 			size = size * 100;
 			return String.valueOf((size / 100)) + "." + String.valueOf((size % 100)) + "MB";
 		} else {
-			// ·ñÔòÈç¹ûÒªÒÔGBÎªµ¥Î»µÄ£¬ÏÈ³ıÓÚ1024ÔÙ×÷Í¬ÑùµÄ´¦Àí
+			// å¦åˆ™å¦‚æœè¦ä»¥GBä¸ºå•ä½çš„ï¼Œå…ˆé™¤äº1024å†ä½œåŒæ ·çš„å¤„ç†
 			size = size * 100 / 1024;
 			return String.valueOf((size / 100)) + "." + String.valueOf((size % 100)) + "GB";
 		}
 	}
 
-	// ¸ñÊ½»¯ÎÄ¼şĞŞ¸ÄÊ±¼ä
+	// æ ¼å¼åŒ–æ–‡ä»¶ä¿®æ”¹æ—¶é—´
 	public static String fileTimeFormat(long time) {
 		return sdf.format(new Date(time));
 	}

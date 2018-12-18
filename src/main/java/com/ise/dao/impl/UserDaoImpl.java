@@ -14,7 +14,7 @@ import com.ise.dao.UserDao;
 import com.ise.pojo.User;
 
 /**
- * ¸üÐÂmysqlÓÃ´ËÀà
+ * æ›´æ–°mysqlç”¨æ­¤ç±»
  * 
  * @author 6
  *
@@ -34,7 +34,7 @@ public class UserDaoImpl implements UserDao {
 		Connection conn = null;
 		User user = null;
 		String sql = "select `user_id`,`user_name`,`password`,`remain_space`,`user_type` "
-				+ "from user where `user_name`= ? and `password` = ?";
+				+ "from `user` where `user_name`= ? and `password` = ?";
 		try {
 			conn = dataSource.getConnection();
 			PreparedStatement pst = conn.prepareStatement(sql);
@@ -66,7 +66,7 @@ public class UserDaoImpl implements UserDao {
 	public User existUser(String username) {
 		Connection conn = null;
 		User user = null;
-		String sql = "select `user_id`,`user_name` from user where `user_name`=?";
+		String sql = "select `user_id`,`user_name` from `user` where `user_name`= ?";
 		try {
 			conn = dataSource.getConnection();
 			PreparedStatement pst = conn.prepareStatement(sql);

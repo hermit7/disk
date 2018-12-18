@@ -1,22 +1,33 @@
 package com.ise.constant;
 
 public class Constants {
-	public static final String NETPAN_ROOT = "/disk/"; // ÍøÅÌ¸ùÄ¿Â¼
+	public static final String NETPAN_ROOT = "/disk/"; // ç½‘ç›˜æ ¹ç›®å½•
 
-	// Éú³ÉÎ¨Ò»rowkeyµÄ±í »ù±¾Ã»ÆäËûÓÃ
+	// ç”Ÿæˆå”¯ä¸€rowkeyçš„è¡¨ åŸºæœ¬æ²¡å…¶ä»–ç”¨
 	public static final String TABLE_GID = "table_gid";
 	public static final String ROWKEY_GID = "gid";
 	public static final String FAMILY_GID = "gid";
 	public static final String COLUMN_GID = "gid";
 
-	// ±£´æ·ÖÏíÎÄ¼şĞÅÏ¢±í
+	// ä¿å­˜åˆ†äº«æ–‡ä»¶ä¿¡æ¯è¡¨
 	public static final String SHARE_TABLE = "share";
 	public static final String SHARE_FAMILY = "share_content";
-	public static final String[] SHARE_COLUMEN = { "shareId", "shareType", "sharetime", "filePath", "fileName",
-			"fileType", "fileSize", "receiverId", "receiverName", "providerId", "providerName"};
+	public static final String[] SHARE_COLUMN = { "shareId", "shareType", "sharetime", "filePath", "fileName",
+			"fileType", "fileSize", "receiverId", "receiverName", "providerId", "providerName" };
 
-	// ºÃÓÑ¹ØÏµ±í
+	// å¥½å‹å…³ç³»è¡¨
 	public static final String FRIEND_TABLE = "friend";
 	public static final String FRIEND_FAMILY = "friend_content";
 	public static final String[] FRIEND_COLUMN = { "userid", "username", "nickname" };
+
+	// ç¾¤ç»„ä¿¡æ¯è¡¨
+	public static final String GROUP_MEMBER_TABLE = "group_memeber";
+	public static final String GROUP_MEMBER_FAMILY = "group_member_content";
+	public static final String[] GROUP_MEMBER_COLUMN = { "groupName", "groupNumber", "member", "ownerName" };
+
+	// ç¾¤ç»„æ–‡ä»¶ä¿¡æ¯è¡¨
+	public static final String GROUP_SHARE_TABLE = "group_share";
+	public static final String GROUP_SHARE_FAMILY = "group_share_content";
+	public static final String[] GROUP_SHARE_COLUMN = { "shareId", "groupName", "groupNumber", "sharetime", "filePath",
+			"fileName", "fileType", "fileSize", "providerId", "providerName" };
 }

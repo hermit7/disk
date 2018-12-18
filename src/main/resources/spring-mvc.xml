@@ -14,11 +14,11 @@
 
 	<!-- 使用注解开发，不用配置controller，需要配置一个组件扫描器 -->
 	<mvc:annotation-driven></mvc:annotation-driven>
-	<mvc:default-servlet-handler/>
-	<mvc:resources location="/images/" mapping="/images/**"/> 
-  	<mvc:resources location="/js/" mapping="/js/**"/>
-  	<mvc:resources location="/css/" mapping="/css/**"/>
-  	<mvc:resources location="/easyui/" mapping="/easyui/**"/>
+	<mvc:default-servlet-handler />
+	<mvc:resources location="/images/" mapping="/images/**" />
+	<mvc:resources location="/js/" mapping="/js/**" />
+	<mvc:resources location="/css/" mapping="/css/**" />
+	<mvc:resources location="/easyui/" mapping="/easyui/**" />
 	<!-- 扫描所有的controller 但是不扫描service -->
 	<context:component-scan base-package="com.ise.*">
 		<context:include-filter type="annotation"
@@ -27,15 +27,35 @@
 			expression="org.springframework.stereotype.Service" />
 	</context:component-scan>
 	<!-- 视图解析器 -->
-	<!-- <bean
-		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		配置从项目根目录到指定目录一端路径 ,建议指定浅一点的目录
-		<property name="prefix" value="/WEB-INF/jsp/"></property>
-		<property name="suffix" value=".jsp"></property>
-	</bean> -->
-	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-		<!-- 配置文件（每次上传的所有文件总大小)大小,单位为b, 1024000表示1000kb  -->
-		<property name="maxUploadSize" value="102400000000" />		
-	</bean> 
-	
+	<!-- <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"> 
+		配置从项目根目录到指定目录一端路径 ,建议指定浅一点的目录 <property name="prefix" value="/WEB-INF/jsp/"></property> 
+		<property name="suffix" value=".jsp"></property> </bean> -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 配置文件（每次上传的所有文件总大小)大小,单位为b, 1024000表示1000kb -->
+		<property name="maxUploadSize" value="102400000000" />
+	</bean>
+
+
+	<!-- rest json related... start -->
+	<bean id="mappingJacksonHttpMessageConverter"
+		class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+		<property name="supportedMediaTypes">
+			<list>
+				<value>application/json;charset=UTF-8</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean
+		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<property name="messageConverters">
+			<list>
+				<ref bean="mappingJacksonHttpMessageConverter" />
+			</list>
+		</property>
+	</bean>
+	<!-- rest json related... end -->
+
+
 </beans>

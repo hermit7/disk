@@ -44,31 +44,21 @@
 		<span>位置：</span>
 		<ul class="placeul">
 			<%-- 此处放一个面包屑导航 --%>
-			<li><a href="javascript:void(0)" onclick="openFile('/')">我的群组</a></li>
-			<c:forEach items="${breadlist}" var="bread">
+			<li><a href="javascript:void(0)" onclick="listGroup()">我的群组</a></li>
+			<%-- <c:forEach items="${breadlist}" var="bread">
 				<li><a href="javascript:void(0)"
-					onclick="openFile('${bread.folderPath}')">${bread.folderName}</a></li>
-			</c:forEach>
-			<!-- <li><a href="javascript:void(0)" onclick="openFile('/')">列表</a></li> -->
+					onclick="listMember()">${bread.folderName}</a></li>
+			</c:forEach> --%>
 		</ul>
 	</div>
 	<div class="tools">
 		<ul class="toolbar">
 			<li class="upload"><span><img
 					src="${basePath }/images/upload_1.png"
-					style="width: 30px; height: 28px" /></span>找群</li>
-			<li class="download"><span><img
-					src="${basePath }/images/download_1.png"
-					style="width: 30px; height: 28px" /></span>下载</li>
-			<li class="share"><span><img
-					src="${basePath }/images/share_1.png"
-					style="width: 30px; height: 28px" /></span>分享</li>
-			<li class="delete"><span><img
-					src="${basePath }/images/delete_1.png"
-					style="width: 30px; height: 28px" /></span>删除</li>
+					style="width: 30px; height: 28px" /></span>加群</li>
 			<li class="newfolder"><span><img
 					src="${basePath }/images/new_file.png"
-					style="width: 30px; height: 28px" /></span>新建群组</li>
+					style="width: 30px; height: 28px" /></span>创建群组</li>
 		</ul>
 
 	</div>
@@ -77,92 +67,71 @@
 		<thead>
 			<tr>
 				<th width="5px"><input name="" type="checkbox" value="" /></th>
-				<th>文件名</th>
-				<td width="200px"></td>
-				<th>修改日期</th>
-				<th>大小</th>
+				<th>群名称</th>
+				<th>群号</th>
+				<th width="200px"></th>
+				<th></th>
+				<th>创建者</th>
 			</tr>
 		</thead>
 		<tbody>
-			<c:forEach items="${fileList}" var="file" varStatus="sta">
+			<c:forEach items="${groupList}" var="group" varStatus="sta">
 				<tr class="row">
 					<td><input id="box" name="" type="checkbox" value="" /></td>
-					<td width="500px"><c:choose>
-							<c:when test="${file.type=='d'}">
-								<a href="javascript:void(0)"
-									ondblclick="openFile('${file.path}')"> <img
-									src="${basePath }/images/f01.png" /> <input class="fileinput"
-									type="text" value="${file.name}" readOnly="readonly">
-								</a>
-							</c:when>
-							<c:when test="${file.type=='p'}">
-								<img src="${basePath }/images/f07.png" />
-								<input class="fileinput" type="text" value="${file.name}"
-									readOnly="readonly">
-							</c:when>
-							<c:when test="${file.type=='v'}">
-								<img src="${basePath }/images/f10.png" />
-								<input class="fileinput" type="text" value="${file.name}"
-									readOnly="readonly">
-							</c:when>
-							<c:when test="${file.type=='z'}">
-								<img src="${basePath }/images/f02.png" />
-								<input class="fileinput" type="text" value="${file.name}"
-									readOnly="readonly">
-							</c:when>
-							<c:when test="${file.type=='t'}">
-								<img src="${basePath }/images/f03.png" />
-								<input class="fileinput" type="text" value="${file.name}"
-									readOnly="readonly">
-							</c:when>
-							<c:when test="${file.type=='m'}">
-								<img src="${basePath }/images/f08.png" />
-								<input class="fileinput" type="text" value="${file.name}"
-									readOnly="readonly">
-							</c:when>
-							<c:when test="${file.type=='o'}">
-								<img src="${basePath }/images/f09.png" />
-								<input class="fileinput" type="text" style="width: 300px;"
-									value="${file.name}" readOnly="readonly">
-							</c:when>
-						</c:choose></td>
+					<td width="200px"><img src="${basePath }/images/group.png" />
+						<input class="fileinput" type="text" value="${group.groupName}"
+						readOnly="readonly"></td>
+					<td><input type="text" value="${group.groupNumber}"
+						readOnly="readonly"></td>
 					<td>
 						<div class="action">
-							<img src="${basePath }/images/modify.png"
-								onclick="modifyFile(this)" style="width: 20px; height: 25px"
-								title="修改"> <img src="${basePath }/images/delete.png"
-								onclick="deleteFile('${file.path}')"
-								style="width: 20px; height: 25px" title="删除"> <img
-								src="${basePath }/images/share.png"
-								style="width: 20px; height: 25px" title="分享"> <img
-								src="${basePath }/images/download.png"
-								onclick="downloadFile('${file.path}')"
-								style="width: 20px; height: 25px" title="下载"> <img
-								src="${basePath }/images/more.png" onclick="moveFile(this)"
-								style="width: 20px; height: 25px" title="更多">
+							<c:choose>
+								<c:when test="${user.username eq group.owner}">
+									<img src="${basePath }/images/modify.png"
+										onclick="renameGroup(this, '${group.groupNumber}')"
+										style="width: 20px; height: 25px" title="修改群名">
+									<img src="${basePath }/images/dismiss.png"
+										onclick="dismissGroup('${group.groupNumber}')"
+										style="width: 20px; height: 25px" title="解散">
+								</c:when>
+								<c:otherwise>
+									<img src="${basePath }/images/quit.png"
+										onclick="quitGroup('${group.groupNumber}')"
+										style="width: 20px; height: 25px" title="退出该群">
+								</c:otherwise>
+							</c:choose>
+							<img src="${basePath }/images/invite.png"
+								onclick="inviteFriend('${group.groupNumber}','${group.groupName }','${ group.owner}')"
+								style="width: 20px; height: 25px" title="邀请">
 						</div>
 					</td>
-					<td>${file.time }</td>
-					<td class="tdlast">${file.size }</td>
+					<td><a href="javascript:void(0)" onclick="listMember('${group.groupNumber}')">成员</a>&nbsp; | &nbsp;<a href="javascript:void(0)" onclick="listShare('${group.groupNumber}')">文件</a></td>
+					<td class="tdlast">${group.owner}</td>
 				</tr>
 
 			</c:forEach>
 		</tbody>
 	</table>
+
+	<div id="dd"></div>
+
 	<div class="tip">
 		<div class="tiptop">
-			<span>上传文件</span>
+			<span>找群</span>
 		</div>
 		<form id="fileForm" method="POST">
 			<div class="tipinfo">
 				<div class="tipright">
-					<p>请选择需要上传的文件</p>
-					<input type="file" name="filename"><br>
+					<!-- <p>找好友</p> -->
+					<input id="searchUser" type="text" name="groupname"
+						style="height: 30px; position: center" placeholder="请输入群名称或ID"><br>
+					<input id="followId" type="hidden"><br> <span
+						id="useralert"></span>
 				</div>
 			</div>
 			<div class="tipbtn">
-				<input name="" type="button" class="sure" onclick="upload()"
-					value="上传" />&nbsp; <input name="" type="button" class="cancel"
+				<input name="" type="button" class="sure" onclick="joinGroup()"
+					value="加入" />&nbsp; <input name="" type="button" class="cancel"
 					value="取消" />
 			</div>
 		</form>
@@ -170,94 +139,82 @@
 
 	<div class="tip2">
 		<div class="tiptop2">
-			<span>新建文件夹</span>
+			<span>新建群</span>
 		</div>
 		<form id="folderForm" method="POST">
 			<div class="tipinfo2">
 				<div class="tipright2">
-					<input type="text" name="folder"
-						style="height: 30px; position: center" placeholder="请输入文件夹名"><br>
+					<input type="text" id="newGroup" name="groupname"
+						style="height: 30px; position: center" placeholder="请输入群名称"><br>
 				</div>
 			</div>
 			<div class="tipbtn2">
-				<input name="" type="button" class="sure2" onclick="mkdir()"
+				<input name="" type="button" class="sure2" onclick="mkgroup()"
 					value="确认" />&nbsp; <input name="" type="button" class="cancel2"
 					value="取消" />
 			</div>
 		</form>
 	</div>
-	
-	
-	<div id="mm" class="easyui-menu" data-options="onClick:menuHandler" style="width: 80px;">
-		<div data-options="name:'copy'">复制到</div>
-		<div data-options="name:'move'">移动到</div>
-	</div>
-	
+
 	<script type="text/javascript">
-		function openFile(path) {
-			var url = "${basePath}/file/list.action?path=" + path;
-			url = encodeURI(url);
-			url = encodeURI(url);
+		function listGroup() {
+			var url = "${basePath}/relation/group.action";
 			var tab = $('#tt', window.parent.document).tabs('getSelected');
 			tab.panel('refresh', url);
 		}
 
 		/**
-			上传文件
+		 * 列出该群的所有成员
 		 */
-		var curPath = '${currentPath}';
-		function upload() {
-			var url = "${basePath}/file/upload.action?curPath=" + curPath;
+		function listMember(groupNumber) {
+			var url = "${basePath}/relation/listMember.action?groupNumber="
+					+ groupNumber;
+			var tab = $('#tt', window.parent.document).tabs('getSelected');
+			tab.panel('refresh', url);
+		}
+
+		/**
+			列出该群所有的共享文件
+		 */
+		function listShare(groupNumber) {
+			var url = "${basePath}/share/listGroupShare.action?groupNumber="
+					+ groupNumber;
+			var tab = $('#tt', window.parent.document).tabs('getSelected');
+			tab.panel('refresh', url);
+		}
+
+		function inviteFriend(groupNumber, groupName, owner) {
+			var url = "${basePath}/relation/member.action?groupNumber="
+					+ groupNumber + "&groupName=" + groupName + "&groupOwner="
+					+ owner;
 			url = encodeURI(url);
 			url = encodeURI(url);
-			var formData = new FormData($('#fileForm')[0]);
-			$.ajax({
-				url : url,
-				type : "POST",
-				data : formData,
-				async : false,
+			$('#dd').dialog({
+				title : '请选择用户',
+				width : 400,
+				height : 400,
+				closed : false,
 				cache : false,
-				contentType : false,
-				processData : false,
-				success : function(data) {
-					$.messager.show({
-						title : 'tip',
-						msg : '文件上传成功',
-						timeout : 2000,
-						showType : 'slide'
-					});
-					openFile(curPath);
-				},
-				error : function(err) {
-					$.messager.show({
-						title : 'tip',
-						msg : '文件上传失败，请重试',
-						timeout : 1000,
-						showType : 'slide'
-					});
-				}
+				href : url, //传到后台，返回一个jsp页面带着数据返回   传递过去当前这个文件的路径
+				modal : true
 			});
 		}
 
 		/**
 			重命名
 		 */
-		function modifyFile(obj) {
+		function renameGroup(obj, groupNumber) {
 			var tr = $(obj).parents(".row");
 			var input = $(tr).find(".fileinput");
-			var originName = input.val();
-			//console.log(originName);
 			input.removeAttr("readonly").focus();
 			input.on("blur", function() {
 				var destName = input.val();
-				//console.log(destName);
 				$.ajax({
-					url : "${basePath}/file/modify.action",
+					url : "${basePath}/relation/renameGroup.action",
 					type : "POST",
 					data : {
-						"curPath" : curPath,
-						"originName" : originName,
-						"destName" : destName
+						"groupNumber" : groupNumber,
+						"destName" : destName,
 					},
 					success : function(data) {
 						if (data) {
@@ -268,128 +225,85 @@
 								showType : 'slide'
 							});
 						}
-						openFile(curPath);
+						listGroup();
 					}
 				});
 			})
 		}
 
 		/**
-			新建文件夹
+			新建群
 		 */
-		function mkdir() {
-			var folder = $("input[name='folder']").val();
+		function mkgroup() {
+			var groupName = $("#newGroup").val();
 			$.ajax({
-				url : "${basePath}/file/mkdir.action",
+				url : "${basePath}/relation/createGroup.action",
 				type : "POST",
 				data : {
-					"curPath" : curPath,
-					"folder" : folder
+					"groupName" : groupName
 				},
 				success : function(data) {
 					if (data) {
 						$.messager.show({
 							title : 'tip',
-							msg : '新建文件夹成功',
-							timeout : 2000,
+							msg : '创群成功',
+							timeout : 1000,
 							showType : 'slide'
 						});
-						openFile(curPath);
+						listGroup();
 					}
 				}
 			});
 		}
 
-		/**
-		下载文件
-		 */
-		function downloadFile(path) {
-			$.ajax({
-				url : "${basePath}/file/download.action",
-				type : "POST",
-				data : {
-					"path" : path
-				},
-				success : function(data) {
-					if (data) {
-						$.messager.show({
-							title : 'tip',
-							msg : '下载成功',
-							timeout : 2000,
-							showType : 'slide'
-						});
-					}
-				},
-				error : function(err) {
-					$.messager.show({
-						title : 'tip',
-						msg : '下载失败，联系管理员',
-						timeout : 2000,
-						showType : 'slide'
-					});
-				}
-			});
-		}
-
-		function deleteFile(path) {
-			$.messager.confirm('确认', '您确认想要删除此文件？', function(r) {
+		function dismissGroup(groupNumber) {
+			$.messager.confirm('确认', '您确认想要解散此群？', function(r) {
 				if (r) {
 					$.ajax({
-						url : "${basePath}/file/delete.action",
+						url : "${basePath}/relation/dismissGroup.action",
 						type : "POST",
 						data : {
-							"path" : path
+							"groupNumber" : groupNumber
 						},
 						success : function(data) {
 							if (data) {
 								$.messager.show({
 									title : 'tip',
-									msg : '删除成功',
-									timeout : 2000,
+									msg : '解散成功',
+									timeout : 1000,
 									showType : 'slide'
 								});
 							}
-							openFile(curPath);
+							listGroup();
 						}
 					});
 				}
 			});
 		}
 
-		function moveFile(obj) {
-			$('#mm').menu('show', {
-				left : getAbsoluteLeft(obj),
-				top : getAbsoluteTop(obj)
+		function quitGroup(groupNumber) {
+			$.messager.confirm('确认', '您确认想要退出此群？', function(r) {
+				if (r) {
+					$.ajax({
+						url : "${basePath}/relation/quitGroup.action",
+						type : "POST",
+						data : {
+							"groupNumber" : groupNumber
+						},
+						success : function(data) {
+							if (data) {
+								$.messager.show({
+									title : 'tip',
+									msg : '退出成功',
+									timeout : 1000,
+									showType : 'slide'
+								});
+							}
+							listGroup();
+						}
+					});
+				}
 			});
-		}
-		
-		function menuHandler(item){
-			alert(item.name)
-		}
-
-		
-		//获取控件左绝对位置
-		function getAbsoluteLeft(o) {
-			/* 	o = document.getElementById(objectId) */
-			oLeft = o.offsetLeft
-			while (o.offsetParent != null) {
-				oParent = o.offsetParent
-				oLeft += oParent.offsetLeft
-				o = oParent
-			}
-			return oLeft
-		}
-
-		//获取控件上绝对位置
-		function getAbsoluteTop(o) {
-			/* o = document.getElementById(objectId); */
-			oTop = o.offsetTop;
-			while (o.offsetParent != null) {
-				oParent = o.offsetParent
-				oTop += oParent.offsetTop // Add parent top position
-				o = oParent
-			}
-			return oTop + 25
 		}
 	</script>
 </body>

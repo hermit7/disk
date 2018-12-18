@@ -23,7 +23,7 @@ public class userServiceImpl implements userService{
 
 	@Override
 	public User existUser(String username, String password) {
-		//对密码进行MD5加密
+		//瀵瑰瘑鐮佽繘琛孧D5鍔犲瘑
 		//password = MD5Util.md5(password);
 		return userDao.existUser(username, password);
 	}

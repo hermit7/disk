@@ -70,7 +70,7 @@ public class HdfsDaoImpl implements HdfsDao {
 	}
 
 	/**
-	 * Õ¹Ê¾¸ÃÄ¿Â¼ÏÂËùÓÐÎÄ¼þ
+	 * å±•ç¤ºè¯¥ç›®å½•ä¸‹æ‰€æœ‰æ–‡ä»¶
 	 * 
 	 * @return
 	 */
@@ -103,18 +103,20 @@ public class HdfsDaoImpl implements HdfsDao {
 	}
 
 	/**
-	 * ÉÏ´«ÎÄ¼þ
+	 * ä¸Šä¼ æ–‡ä»¶
 	 */
 	@Override
-	public boolean uploadFile(InputStream in, String path, String name) {
+	public boolean uploadFile(InputStream in, String path, String name, long size) {
 		String dest = PathUtil.formatPath(path, name);
 		Path dst = new Path(dest);
 		boolean flag = true;
 		try {
 			OutputStream os = fs.create(dst, new Progressable() {
+				//long fileCount = 0;
 				@Override
 				public void progress() {
-
+					//fileCount++;
+					//System.out.println("æ€»è¿›åº¦" + (fileCount/size) * 100 + "%");
 				}
 			});
 			// len = IOUtils.copy(in, os);
@@ -167,7 +169,7 @@ public class HdfsDaoImpl implements HdfsDao {
 	}
 
 	/**
-	 * ÓÃ»§ÐÂ½¨ÎÄ¼þ¼Ð
+	 * ç”¨æˆ·æ–°å»ºæ–‡ä»¶å¤¹
 	 */
 	@Override
 	public boolean makeDir(String curPath, String folder) {
@@ -183,7 +185,7 @@ public class HdfsDaoImpl implements HdfsDao {
 	}
 
 	/**
-	 * ÐÂ½¨ÓÃ»§¸ùÄ¿Â¼
+	 * æ–°å»ºç”¨æˆ·æ ¹ç›®å½•
 	 */
 	public void makeDir(String root) {
 		Path path = new Path(Constants.NETPAN_ROOT + root);

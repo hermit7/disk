@@ -2,7 +2,7 @@ package com.ise.pojo;
 
 import java.io.Serializable;
 /**
- * Ãæ°üĞ¼µ¼º½¶ÔÏó
+ * é¢åŒ…å±‘å¯¼èˆªå¯¹è±¡
  * @author 6
  *
  */
@@ -10,8 +10,8 @@ public class BreadCrumb implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
-	private String folderName;  //¸÷¼¶ÎÄ¼ş¼ĞµÄÃû×Ö
-	private String folderPath;	//¸ÃÎÄ¼ş¼ĞÂ·¾¶
+	private String folderName;  //å„çº§æ–‡ä»¶å¤¹çš„åå­—
+	private String folderPath;	//è¯¥æ–‡ä»¶å¤¹è·¯å¾„
 
 	
 	public String getFolderName() {

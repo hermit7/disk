@@ -62,7 +62,7 @@ public class PathUtil {
 		return result;
 	}
 
-	// ÕÒ³öµ±Ç°¸ùÄ¿Â¼ÏÂËùÓĞµÄÎÄ¼ş¼Ğ
+	// æ‰¾å‡ºå½“å‰æ ¹ç›®å½•ä¸‹æ‰€æœ‰çš„æ–‡ä»¶å¤¹
 	public static HdfsFolder listFolder(String curRoot) {
 		HdfsFolder root = null;
 		HashMap<String, String> attr = null;
@@ -72,7 +72,7 @@ public class PathUtil {
 			FileStatus[] listStatus = fs.listStatus(new Path(curRoot));
 			attr = new HashMap<>();
 			attr.put("url", curRoot);
-			root.setText("È«²¿ÎÄ¼ş");
+			root.setText("å…¨éƒ¨æ–‡ä»¶");
 			root.setChecked(true);
 			root.setAttributes(attr);
 			ArrayList<HdfsFolder> children = new ArrayList<>();

@@ -3,6 +3,7 @@ package com.ise.action;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ise.pojo.Share;
 import com.ise.pojo.User;
+import com.ise.service.RelationService;
 import com.ise.service.ShareService;
 
 @Controller
@@ -23,18 +25,20 @@ public class ShareController {
 
 	@Autowired
 	private ShareService shareService;
-
+	
+	@Autowired
+	private RelationService relationService;
 	/**
 	 * 
 	 * @param session
-	 * @param path        ·ÖÏíµÄÎÄ¼þÂ·¾¶
-	 * @param receiveId   ½ÓÊÕÕßid
-	 * @param receiveName ½ÓÊÕÕßname
+	 * @param path        åˆ†äº«çš„æ–‡ä»¶è·¯å¾„
+	 * @param receiveId   æŽ¥æ”¶è€…id
+	 * @param receiveName æŽ¥æ”¶è€…name
 	 * @return
 	 */
-	@RequestMapping(value = "/addShare")
+	@RequestMapping(value = "/addMemberShare")
 	@ResponseBody
-	public boolean addShare(HttpSession session, String path, String receiverId, String receiverName) {
+	public boolean addMemberShare(HttpSession session, String path, String receiverId, String receiverName) {
 		User user = (User) session.getAttribute("user");
 		try {
 			path = URLDecoder.decode(path, "UTF-8");
@@ -43,7 +47,42 @@ public class ShareController {
 		}
 		return shareService.addShare(user, path, receiverId, receiverName);
 	}
-
+	
+	/**
+	 * 
+	 * @param session
+	 * @param path        åˆ†äº«çš„æ–‡ä»¶è·¯å¾„
+	 * @param receiveId   æŽ¥æ”¶è€…id
+	 * @param receiveName æŽ¥æ”¶è€…name
+	 * @return
+	 */
+	@RequestMapping(value = "/addGroupShare")
+	@ResponseBody
+	public boolean addGroupShare(HttpSession session, String path, String groupNumber, String groupName) {
+		User user = (User) session.getAttribute("user");
+		try {
+			path = URLDecoder.decode(path, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		return shareService.addGroupShare(user, path, groupNumber, groupName);
+	}
+	
+	@RequestMapping(value = "/listGroupShare")
+	public String listGroupShare(HttpSession session,String groupNumber,Model model) {
+		User user = (User) session.getAttribute("user");
+		List<Share> shareList = shareService.listGroupShare(groupNumber);
+		Map<String, String> groupInfo = relationService.getGroupInfo(groupNumber, user.getUsername());
+		String owner = groupInfo.get("owner");
+		String groupName = groupInfo.get("groupName");
+		model.addAttribute("shareList", shareList);
+		model.addAttribute("owner", owner);
+		model.addAttribute("groupName", groupName + "(æ–‡ä»¶)");
+		model.addAttribute("groupNumber", groupNumber);
+		model.addAttribute("user", user);
+		return "/jsp/groupfile.jsp";
+	}
+	
 	@RequestMapping(value = "/receive")
 	public String receivedShare(HttpSession session, Model model) {
 		User user = (User) session.getAttribute("user");
@@ -69,6 +108,12 @@ public class ShareController {
 		}
 		return shareService.deleteShare(userId, shareId);
 	}
+	
+	@RequestMapping(value = "/deleteGroupShare")
+	@ResponseBody
+	public boolean deleteGroupShare(String groupNumber, String shareId) {
+		return shareService.deleteGroupShare(groupNumber, shareId);
+	}
 
 	@RequestMapping(value = "/dirTree")
 	public String showDirTreeUI(Model model, String path) {
@@ -93,5 +138,9 @@ public class ShareController {
 		}
 		return flag;
 	}
+	
 
+	
+	
+	
 }

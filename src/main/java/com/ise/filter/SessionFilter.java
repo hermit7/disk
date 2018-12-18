@@ -15,15 +15,15 @@ public class SessionFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-		// ²»¹ıÂËµÄurl
-		String[] noFilters = new String[] { "/login", "/register", "/forget" };
-		// ÇëÇóµÄuri
+		// ä¸è¿‡æ»¤çš„url
+		String[] noFilters = new String[] { "/login", "/register", "/forget", "/main", "/js","/css" };
+		// è¯·æ±‚çš„uri
 		String uri = request.getRequestURI();
-		// ÊÇ·ñ¹ıÂË
+		// æ˜¯å¦è¿‡æ»¤
 		boolean doFilter = true;
 		for (String str : noFilters) {
 			if (uri.contains(str)) {
-				// Èç¹ûuriÖĞ°üº¬²»¹ıÂËµÄurl£¬Ôò²»¹ıÂË
+				// å¦‚æœuriä¸­åŒ…å«ä¸è¿‡æ»¤çš„urlï¼Œåˆ™ä¸è¿‡æ»¤
 				doFilter = false;
 				break;
 			}
@@ -32,25 +32,26 @@ public class SessionFilter extends OncePerRequestFilter {
 			Object obj = request.getSession().getAttribute("user");
 			if (null == obj) {
 				boolean ajaxRequest = isAjaxRequest(request);
-				if(ajaxRequest) {
+				if (ajaxRequest) {
 					response.setCharacterEncoding("UTF-8");
-					response.sendError(HttpStatus.UNAUTHORIZED.value(), "Ì«³¤Ê±¼äÎ´²Ù×÷£¬ÇëË¢ĞÂ");
+					response.sendError(HttpStatus.UNAUTHORIZED.value(), "å¤ªé•¿æ—¶é—´æœªæ“ä½œï¼Œè¯·åˆ·æ–°");
 					return;
 				}
 				response.sendRedirect("/login.html");
 				return;
-			}else {
+			} else {
 				filterChain.doFilter(request, response);
 			}
-		}else {
+		} else {
 			filterChain.doFilter(request, response);
 		}
 
 	}
 
 	/**
-	  * ÅĞ¶ÏÊÇ·ñÎªAjaxÇëÇó <¹¦ÄÜÏêÏ¸ÃèÊö>  @param request 59 * @return ÊÇtrue, ·ñfalse
-	  * @see [Àà¡¢Àà#·½·¨¡¢Àà#³ÉÔ±] 61
+	 * åˆ¤æ–­æ˜¯å¦ä¸ºAjaxè¯·æ±‚ <åŠŸèƒ½è¯¦ç»†æè¿°> @param request 59 * @return æ˜¯true, å¦false
+	 * 
+	 * @see [ç±»ã€ç±»#æ–¹æ³•ã€ç±»#æˆå‘˜] 61
 	 */
 	public static boolean isAjaxRequest(HttpServletRequest request) {
 		String header = request.getHeader("X-Requested-With");

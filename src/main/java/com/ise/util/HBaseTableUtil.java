@@ -21,26 +21,30 @@ public class HBaseTableUtil {
 	public static void main(String[] args) {
 		// dropTables();
 		createTable(Constants.SHARE_TABLE, Constants.SHARE_FAMILY);
+		createTable(Constants.GROUP_MEMBER_TABLE, Constants.GROUP_MEMBER_FAMILY);
+		createTable(Constants.GROUP_SHARE_TABLE, Constants.GROUP_SHARE_FAMILY);
 		createTable(Constants.TABLE_GID, Constants.FAMILY_GID);
+		createTable(Constants.FRIEND_TABLE, Constants.FRIEND_FAMILY);
+		// dropTable("group");
 	}
 
-	// ´´½¨±í
+	// åˆ›å»ºè¡¨
 	public static void createTable(String tb, String family) {
-		// ´´½¨±íÃèÊöÆ÷
+		// åˆ›å»ºè¡¨æè¿°å™¨
 		dropTable(tb);
 		TableName tableName = TableName.valueOf(tb);
 		ModifyableTableDescriptor tableDescriptor = new TableDescriptorBuilder.ModifyableTableDescriptor(tableName);
 
-		// ´´½¨ÁĞ×åÃèÊöÆ÷
+		// åˆ›å»ºåˆ—æ—æè¿°å™¨
 		ModifyableColumnFamilyDescriptor familyDescriptor = new ColumnFamilyDescriptorBuilder.ModifyableColumnFamilyDescriptor(
 				toBytes(family));
 
-		// Ôö¼ÓÁĞ×å
+		// å¢åŠ åˆ—æ—
 		tableDescriptor.setColumnFamily(familyDescriptor);
 
-		// ´´½¨±í
+		// åˆ›å»ºè¡¨
 		try {
-			// Èç¹û±í²»´æÔÚ£¬´´½¨±í
+			// å¦‚æœè¡¨ä¸å­˜åœ¨ï¼Œåˆ›å»ºè¡¨
 			if (!admin.tableExists(tableName)) {
 				admin.createTable(tableDescriptor);
 			}
@@ -50,7 +54,7 @@ public class HBaseTableUtil {
 		}
 	}
 
-	// É¾³ıËùÓĞµÄ±í
+	// åˆ é™¤æ‰€æœ‰çš„è¡¨
 	public static void dropTables() {
 		try {
 			TableName[] names = admin.listTableNames();
@@ -66,10 +70,14 @@ public class HBaseTableUtil {
 		}
 	}
 
-	// É¾³ıÒ»ÕÅ±í
+	// åˆ é™¤ä¸€å¼ è¡¨
 	public static void dropTable(String tableName) {
 		TableName tb = TableName.valueOf(tableName);
 		try {
+			// å¦‚æœè¡¨ä¸å­˜åœ¨è¿”å›
+			if (!admin.tableExists(tb)) {
+				return;
+			}
 			if (admin.isTableEnabled(tb)) {
 				admin.disableTable(tb);
 				admin.deleteTable(tb);

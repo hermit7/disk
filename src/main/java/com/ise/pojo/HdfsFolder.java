@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 /**
- * Ä¿Â¼Ê÷¶ÔÏó
+ * ç›®å½•æ ‘å¯¹è±¡
  * @author 6
  *
  */
@@ -13,10 +13,10 @@ public class HdfsFolder implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String id;
-	private String text; //Ä¿Â¼½ÚµãµÄÃû×Ö
-	private String state; //½Úµã×´Ì¬
-	private boolean checked; //½ÚµãÊÇ·ñÑ¡ÖĞ
-	private Map<String,String> attributes;  //×Ô¶¨ÒåÊôĞÔ ±£´æÄ¿Â¼µÄÂ·¾¶
+	private String text; //ç›®å½•èŠ‚ç‚¹çš„åå­—
+	private String state; //èŠ‚ç‚¹çŠ¶æ€
+	private boolean checked; //èŠ‚ç‚¹æ˜¯å¦é€‰ä¸­
+	private Map<String,String> attributes;  //è‡ªå®šä¹‰å±æ€§ ä¿å­˜ç›®å½•çš„è·¯å¾„
 	private List<HdfsFolder> children;
 	public String getId() {
 		return id;

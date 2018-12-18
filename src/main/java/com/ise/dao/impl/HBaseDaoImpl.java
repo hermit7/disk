@@ -1,11 +1,14 @@
 package com.ise.dao.impl;
 
 import java.io.IOException;
+import java.util.Iterator;
 
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Connection;
 import org.apache.hadoop.hbase.client.Delete;
+import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.Put;
+import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.client.Table;
@@ -27,12 +30,12 @@ public class HBaseDaoImpl implements HBaseDao {
 		HBaseDao impl = new HBaseDaoImpl();
 		User user = new User();
 		user.setUserId("1");
-		user.setUsername("¿Ó¿⁄");
-		user.setNickname("da's∞¢…™∂´");
+		user.setUsername("ÊùéÁ£ä");
+		user.setNickname("da'sÈòøÁëü‰∏ú");
 		User friend = new User();
 		friend.setUserId("2");
-		friend.setUsername("¿Ó’˝”¢");
-		friend.setNickname("–°ø…∞Æ");
+		friend.setUsername("ÊùéÊ≠£Ëã±");
+		friend.setNickname("Â∞èÂèØÁà±");
 		impl.updateMoreData(Constants.FRIEND_TABLE, user.getUserId() + "_" + friend.getUserId(),
 				Constants.FRIEND_FAMILY, Constants.FRIEND_COLUMN,
 				new String[] { friend.getUserId(), friend.getUsername(), friend.getNickname() });
@@ -55,12 +58,12 @@ public class HBaseDaoImpl implements HBaseDao {
 	}
 
 	@Override
-	public boolean updateOneData(String tableName, Object rowKey, String family, Object column, Object value) {
+	public boolean updateOneData(String tableName, String rowKey, String family, String column, String value) {
 		boolean flag = true;
 		try {
 			Table table = conn.getTable(TableName.valueOf(tableName));
-			Put put = new Put(Bytes.toBytes(rowKey.toString()));
-			put.addColumn(Bytes.toBytes(family), Bytes.toBytes(column.toString()), Bytes.toBytes(value.toString()));
+			Put put = new Put(Bytes.toBytes(rowKey));
+			put.addColumn(Bytes.toBytes(family), Bytes.toBytes(column), Bytes.toBytes(value));
 			table.put(put);
 			table.close();
 		} catch (IOException e) {
@@ -71,7 +74,7 @@ public class HBaseDaoImpl implements HBaseDao {
 	}
 
 	@Override
-	public boolean updateMoreData(String tableName, Object rowKey, String family, String[] column, String[] value) {
+	public boolean updateMoreData(String tableName, String rowKey, String family, String[] column, String[] value) {
 		boolean flag = true;
 		try {
 			Table table = conn.getTable(TableName.valueOf(tableName));
@@ -106,11 +109,11 @@ public class HBaseDaoImpl implements HBaseDao {
 	}
 
 	@Override
-	public boolean deleteDataByRow(String tableName, Object rowKey) {
+	public boolean deleteDataByRow(String tableName, String rowKey) {
 		boolean flag = true;
 		try {
 			Table table = conn.getTable(TableName.valueOf(tableName));
-			Delete deleteAll = new Delete(Bytes.toBytes(rowKey.toString()));
+			Delete deleteAll = new Delete(Bytes.toBytes(rowKey));
 			table.delete(deleteAll);
 			table.close();
 		} catch (IOException e) {
@@ -119,5 +122,69 @@ public class HBaseDaoImpl implements HBaseDao {
 		}
 		return flag;
 	}
+	
+	@Override
+	public boolean deleteData(String tableName,Delete delete) {
+		boolean flag = true;
+		try {
+			Table table = conn.getTable(TableName.valueOf(tableName));
+			table.delete(delete);
+			table.close();
+		} catch (IOException e) {
+			flag = false;
+			e.printStackTrace();
+		}
+		return flag;
+	}
+	
+	@Override
+	public boolean recordExisted(String tableName, Filter filter) {
+		try {
+			ResultScanner rs = getResultScannerByFilter(tableName, filter);
+			Iterator<Result> iter = rs.iterator();
+			return iter.hasNext();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	@Override
+	public boolean recordExisted(String tableName, String rowKey) {
+		Get get = new Get(Bytes.toBytes(rowKey));
+		get.setCheckExistenceOnly(true);
+		try {
+			Table table = conn.getTable(TableName.valueOf(tableName));
+			Result result = table.get(get);
+			if (result.size() == 0) {
+				return false;
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return true;
+	}
+	
+	 /**
+     * Ëé∑Âæó‰∏ÄË°åÊï∞ÊçÆ
+     * @category get 'tableName','rowKey'
+     * @param tableName
+     * @param rowKey
+     * @return Result||null
+     * @throws IOException
+     */
+    public Result getResultByRow(String tableName, String rowKey) {
+    	Result result = null;
+    	try {
+	        Table table = conn.getTable(TableName.valueOf(tableName));
+	        Get get = new Get(Bytes.toBytes(rowKey));
+	        result = table.get(get);
+	        table.close();
+    	} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return result;
+    }
 
 }

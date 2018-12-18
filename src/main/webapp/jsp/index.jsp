@@ -91,7 +91,7 @@
 	<script type="text/javascript">
 		function openFileUI(btn) {
 			if ($('#tt').tabs('exists', btn.text)) {
-				$('#tt').tabs("select", btn.text);
+				var tab = $('#tt').tabs("select", btn.text);
 			} else {
 				$('#tt').tabs("add", {
 					title : btn.text,

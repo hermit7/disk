@@ -1,5 +1,7 @@
 package com.ise.action;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.ise.pojo.Group;
 import com.ise.pojo.User;
 import com.ise.service.RelationService;
 
@@ -56,8 +59,29 @@ public class RelationController {
 		return "/jsp/share.jsp";
 	}
 
+	@RequestMapping(value = "/member")
+	public String member(String groupName, String groupNumber, String groupOwner, Model model) {
+		try {
+			groupName = URLDecoder.decode(groupName, "UTF-8");
+			groupOwner = URLDecoder.decode(groupOwner, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		model.addAttribute("groupName", groupName);
+		model.addAttribute("groupNumber", groupNumber);
+		model.addAttribute("groupOwner", groupOwner);
+		return "/jsp/member.jsp";
+	}
+
+	@RequestMapping(value = "/addGroupMember")
+	@ResponseBody
+	public boolean addMember(String groupName, String groupNumber, String groupOwner, String username) {
+		return relationService.addGroupMemeber(groupName, groupNumber, groupOwner, username);
+	}
+
 	/**
-	 * չʾ���û�����ע���û�
+	 * 展示该用户所关注的用户
+	 * 
 	 * @param session
 	 * @return
 	 */
@@ -68,11 +92,99 @@ public class RelationController {
 		List<Map<String, String>> follows = relationService.showFollows(user);
 		return follows;
 	}
+	
+	/**
+	 * 展示该用户所关注的用户
+	 * 
+	 * @param session
+	 * @return
+	 */
+	@RequestMapping(value = "/showGroups")
+	@ResponseBody
+	public List<Map<String, String>> showGroups(HttpSession session) {
+		User user = (User) session.getAttribute("user");
+		List<Map<String, String>> follows = relationService.showGroups(user);
+		return follows;
+	}
 
-
+	/**
+	 * 查询我所在的群组
+	 * 
+	 * @return
+	 */
 	@RequestMapping(value = "/group")
-	public String groupList() {
+	public String groupList(HttpSession session, Model model) {
+		User user = (User) session.getAttribute("user");
+		List<Group> groupList = relationService.listGroups(user);
+		model.addAttribute("groupList", groupList);
+		model.addAttribute("user", user);
 		return "/jsp/group.jsp";
+	}
+
+	/**
+	 * 新建群组
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/createGroup")
+	@ResponseBody
+	public boolean createGroup(HttpSession session, String groupName) {
+		User user = (User) session.getAttribute("user");
+		return relationService.createGroup(user, groupName);
+	}
+
+	/**
+	 * 新建群组
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/renameGroup")
+	@ResponseBody
+	public boolean renameGroup(String groupNumber, String destName) {
+		return relationService.renameGroup(groupNumber, destName);
+	}
+
+	/**
+	 * 退出群组
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/quitGroup")
+	@ResponseBody
+	public boolean quitGroup(HttpSession session, String groupNumber) {
+		User user = (User) session.getAttribute("user");
+		return relationService.quitGroup(user, groupNumber);
+	}
+
+	/**
+	 * 解散群组
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/dismissGroup")
+	@ResponseBody
+	public boolean dismissGroup(String groupNumber) {
+		return relationService.dissmissGroup(groupNumber);
+	}
+
+	/**
+	 * 组成员
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/listMember")
+	public String listGroupMember(HttpSession session, String groupNumber, Model model) {
+		User user = (User) session.getAttribute("user");
+		List<User> member = relationService.listGroupMember(groupNumber);
+		Map<String, String> groupInfo = relationService.getGroupInfo(groupNumber, user.getUsername());
+		String owner = groupInfo.get("owner");
+		String groupName = groupInfo.get("groupName");
+		model.addAttribute("memberList", member);
+		model.addAttribute("owner", owner);
+		model.addAttribute("groupName", groupName + "(成员)");
+		model.addAttribute("groupNumber", groupNumber);
+		model.addAttribute("user", user);
+		return "/jsp/groupmember.jsp";
 	}
 
 }
