@@ -12,6 +12,8 @@ import org.apache.hadoop.hbase.filter.PrefixFilter;
 import org.apache.hadoop.hbase.filter.SingleColumnValueFilter;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.ise.constant.Constants;
@@ -116,6 +118,7 @@ public class ShareServiceImpl implements ShareService {
 		return shareDao.deleteShare(Constants.SHARE_TABLE, rowKey);
 	}
 
+	@CacheEvict(value = "groupShare", key = "'groupShare_' + #groupNumber")
 	@Override
 	public boolean deleteGroupShare(String groupNumber, String shareId) {
 		String rowKey = groupNumber + "_" + shareId;
@@ -127,11 +130,13 @@ public class ShareServiceImpl implements ShareService {
 		return hdfsDao.copyFile(path, dst);
 	}
 
+	@CacheEvict(value = "groupShare", key = "'groupShare_' + #groupNumber")
 	@Override
 	public boolean addGroupShare(User user, String path, String groupNumber, String groupName) {
 		return shareDao.addGroupShare(user, path, groupNumber, groupName);
 	}
 
+	@Cacheable(value = "groupShare", key = "'groupShare_' + #groupNumber")
 	@Override
 	public List<Share> listGroupShare(String groupNumber) {
 		List<Share> list = new ArrayList<Share>();

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.ise.dao.UserDao;
+import com.ise.mapper.UserMapper;
 import com.ise.pojo.User;
 
 @Controller()
@@ -13,11 +13,11 @@ import com.ise.pojo.User;
 public class UserController {
 	
 	@Autowired
-	private UserDao userDao;
+	private UserMapper userDao;
 	
 	@RequestMapping(value = "/existUser")
 	@ResponseBody
-	public User existUser(String username) {
-		return userDao.existUser(username);
+	public User findUser(String username) {
+		return userDao.findUser(username);
 	}
 }

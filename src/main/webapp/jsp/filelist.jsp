@@ -18,9 +18,13 @@
 				$(".tip").fadeIn(200);
 			});
 
-			$(".sure").click(function() {
+			/* $(".sure").click(function() {
 				$(".tip").fadeOut(100);
-			});
+			}); */
+
+			function fadeOut() {
+				$(".tip").fadeOut(100);
+			}
 
 			$(".cancel").click(function() {
 				$(".tip").fadeOut(100);
@@ -44,7 +48,8 @@
 		<span>位置：</span>
 		<ul class="placeul">
 			<%-- 此处放一个面包屑导航 --%>
-			<li><a href="javascript:void(0)" onclick="openFile('/disk/${user.username}')">我的网盘</a></li>
+			<li><a href="javascript:void(0)"
+				onclick="openFile('/')">我的网盘</a></li>
 			<c:forEach items="${breadlist}" var="bread">
 				<li><a href="javascript:void(0)"
 					onclick="openFile('${bread.folderPath}')">${bread.folderName}</a></li>
@@ -95,7 +100,7 @@
 								<a href="javascript:void(0)"
 									ondblclick="openFile('${file.path}')"> <img
 									src="${basePath }/images/f01.png" /> <input class="fileinput"
-									type="text" value="${file.name}" readOnly="readonly">
+									type="text" value="${file.name}" readonly="readonly">
 								</a>
 							</c:when>
 							<c:when test="${file.type=='p'}">
@@ -136,7 +141,8 @@
 								title="修改"> <img src="${basePath }/images/delete.png"
 								onclick="deleteFile('${file.path}')"
 								style="width: 20px; height: 25px" title="删除"> <img
-								src="${basePath }/images/share.png" onclick="shareFile('${file.path}')"
+								src="${basePath }/images/share.png"
+								onclick="shareFile('${file.path}')"
 								style="width: 20px; height: 25px" title="分享"> <img
 								src="${basePath }/images/download.png"
 								onclick="downloadFile('${file.path}')"
@@ -156,15 +162,21 @@
 		<div class="tiptop">
 			<span>上传文件</span>
 		</div>
-		<form id="fileForm" method="POST">
+		<form id="fileForm" action="./uploadServlet" method="POST"
+			enctype="multipart/form-data">
 			<div class="tipinfo">
 				<div class="tipright">
 					<p>请选择需要上传的文件</p>
-					<input type="file" name="filename"><br>
+					<input id="uploadFile" type="file" name="filename"
+						onchange="doValidate()"><br>
 				</div>
+				<div id="progressBar">
+					<div id="progress"></div>
+				</div>
+				<span id="fileTip"></span><span id="proInfo">上传进度：0%</span>
 			</div>
 			<div class="tipbtn">
-				<input name="" type="button" class="sure" onclick="upload()"
+				<input name="" class="sure" type="button" onclick="upload()"
 					value="上传" />&nbsp; <input name="" type="button" class="cancel"
 					value="取消" />
 			</div>
@@ -211,7 +223,7 @@
 			上传文件
 		 */
 		var curPath = '${currentPath}';
-		function upload() {
+		/* function upload() {
 			var url = "${basePath}/file/upload.action?curPath=" + curPath;
 			url = encodeURI(url);
 			url = encodeURI(url);
@@ -242,6 +254,51 @@
 					});
 				}
 			});
+		} */
+
+		function doValidate() {
+			var filename = $("#uploadFile").val();
+			if (filename == "") {
+				$("#fileTip").css({
+					"color" : "red"
+				});
+				$('#fileTip').html("未选择");
+				return false;
+			} else {
+				$("#fileTip").css({
+					"color" : "green"
+				});
+				$('#fileTip').html("已选择");
+				return true;
+			}
+		}
+
+		function upload() {
+			//非空判断
+			if (!doValidate()) {
+				return false;
+			}
+			var form = new FormData($('#fileForm')[0]);
+			url = '${basePath}/file/uploadFile.action';
+			form.append("curPath", curPath);
+			var xhr = new XMLHttpRequest();
+			xhr.open("post", url, true);
+			xhr.onload = function() {
+				openFile(curPath);
+			}
+			xhr.upload.addEventListener("progress", progressFunction, false);
+			xhr.send(form);
+		}
+
+		function progressFunction(evt) {
+			var progressBar = $("#progressBar");
+			if (evt.lengthComputable) {
+				var completePercent = Math.round(evt.loaded / evt.total * 100);
+				$("#proInfo").text("上传进度：" + completePercent + "%");
+				if (completePercent == 100) {
+					$(".tip").fadeOut(1000);
+				}
+			}
 		}
 
 		/**
@@ -335,13 +392,12 @@
 				}
 			});
 		}
-	
-		
-		function downloadFiles(){
+
+		function downloadFiles() {
 			alert("请选择多个文件");
 		}
-			
-		function shareFiles(){
+
+		function shareFiles() {
 			alert("分享多个文件");
 		}
 		function deleteFile(path) {
@@ -379,8 +435,9 @@
 			});
 		}
 
-		function shareFile(path){
-			var url = '${basePath}/relation/shareUI.action?path=' + path;
+		function shareFile(path) {
+			var url = '${basePath}/relation/shareUI.action?path='
+					+ encodeURIComponent(path);
 			url = encodeURI(url);
 			url = encodeURI(url);
 			console.log(path);
@@ -394,11 +451,10 @@
 				modal : true
 			});
 		}
-		
-		
+
 		function menuHandler(item) {
 			var url = '${basePath}/file/dirTree.action?curPath=' + curPath
-					+ '&originName=' + originName + '&motion='+item.name;
+					+ '&originName=' + originName + '&motion=' + item.name;
 			url = encodeURI(url);
 			url = encodeURI(url);
 			$('#dd').dialog({

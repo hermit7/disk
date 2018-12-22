@@ -178,7 +178,7 @@
 		}
 
 		function shareShare(path) {
-			var url = '${basePath}/relation/shareUI.action?path=' + path;
+			var url = '${basePath}/relation/shareUI.action?path=' + encodeURIComponent(path);
 			url = encodeURI(url);
 			url = encodeURI(url);
 			console.log(path);
@@ -222,7 +222,7 @@
 		}
 
 		function saveShare(path) {
-			var url = '${basePath}/share/dirTree.action?path=' + path;
+			var url = '${basePath}/share/dirTree.action?path=' + encodeURIComponent(path);
 			url = encodeURI(url);
 			url = encodeURI(url);
 			$('#dd').dialog({

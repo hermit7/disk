@@ -14,7 +14,7 @@ public class User implements Serializable {
 
 	private String username; // 用户名 唯一约束 用来存放用户文件根目录
 	private String userId; // 用户ID 方便外部引用 主键
-	private String pasword; // 密码
+	private String password; // 密码
 	private String space; // 用户空间
 	private String type; // 用户类型 普通用户 、管理员
 
@@ -22,6 +22,14 @@ public class User implements Serializable {
 
 	public String getNickname() {
 		return nickname;
+	}
+	
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public void setNickname(String nickname) {
@@ -42,14 +50,6 @@ public class User implements Serializable {
 
 	public void setUserId(String userId) {
 		this.userId = userId;
-	}
-
-	public String getPasword() {
-		return pasword;
-	}
-
-	public void setPasword(String pasword) {
-		this.pasword = pasword;
 	}
 
 	public String getSpace() {

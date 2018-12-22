@@ -16,24 +16,20 @@ public interface RelationService {
 
 	boolean follow(String userId, String userId2, String username);
 
-	List<Map<String, String>> showFollows(User user);
-
 	boolean createGroup(User user, String groupName);
 
 	List<Group> listGroups(User user);
 
-	boolean addGroupMemeber(String groupName, String groupNumber,String groupOwner ,String username);
+	boolean addGroupMemeber(String groupName, String groupNumber, String groupOwner, String userId, String username);
 
-	boolean dissmissGroup(String groupNumber);
+	boolean dissmissGroup(User user, String groupNumber);
 
 	boolean quitGroup(User user, String groupNumber);
 
-	boolean renameGroup(String groupNumber, String destName);
+	boolean renameGroup(User user, String groupNumber, String destName);
 
 	List<User> listGroupMember(String groupNumber);
 
-	Map<String, String> getGroupInfo(String groupNumber, String username);
-
-	List<Map<String, String>> showGroups(User user);
+	Map<String, String> getGroupInfo(String groupNumber, String userId);
 
 }

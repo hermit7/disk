@@ -4,13 +4,13 @@
 	xmlns:aop="http://www.springframework.org/schema/aop"
 	xmlns:tx="http://www.springframework.org/schema/tx"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+        http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
         http://www.springframework.org/schema/context
-       http://www.springframework.org/schema/context/spring-context-4.1.xsd
+       http://www.springframework.org/schema/context/spring-context-4.3.xsd
        http://www.springframework.org/schema/aop
-       http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+       http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
        http://www.springframework.org/schema/tx
-       http://www.springframework.org/schema/tx/spring-tx-4.1.xsd">
+       http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
 
 	<context:component-scan base-package="com.ise.*">
 		<context:exclude-filter type="annotation"
@@ -29,98 +29,7 @@
 		</property>
 	</bean>
 
-	<bean id="dataSource"
-		class="com.alibaba.druid.pool.DruidDataSource" init-method="init"
-		destroy-method="close">
-		<!-- 基本属性 url、user、password127.0.0.1 -->
-		<property name="driverClassName" value="${local.driverClass}" />
-		<property name="url" value="${local.jdbcUrl}" />
-		<property name="username" value="${local.user}" />
-		<property name="password" value="${local.password}" />
-
-		<!-- 配置初始化大小、最小、最大 -->
-		<property name="initialSize" value="2" />
-		<property name="minIdle" value="1" />
-		<property name="maxActive" value="20" />
-
-		<!-- 配置获取连接等待超时的时间 -->
-		<property name="maxWait" value="60000" />
-
-		<!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
-		<property name="timeBetweenEvictionRunsMillis" value="60000" />
-
-		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
-		<property name="minEvictableIdleTimeMillis" value="300000" />
-
-		<!-- 验证连接有效与否的SQL，不同的数据配置不同 -->
-
-		<property name="validationQuery" value="SELECT 'x'" />
-		<property name="testWhileIdle" value="true" />
-		<property name="testOnBorrow" value="false" />
-		<property name="testOnReturn" value="false" />
-
-		<!-- 打开PSCache，并且指定每个连接上PSCache的大小 -->
-		<property name="poolPreparedStatements" value="true" />
-		<property name="maxPoolPreparedStatementPerConnectionSize"
-			value="20" />
-
-		<!-- 配置监控统计拦截的filters -->
-		<property name="filters" value="stat" />
-	</bean>
-
-	<!-- 配置druid监控spring jdbc -->
-	<!-- <bean id="druid-stat-interceptor" class="com.alibaba.druid.support.spring.stat.DruidStatInterceptor" 
-		/> <bean id="druid-stat-pointcut" class="org.springframework.aop.support.JdkRegexpMethodPointcut" 
-		scope="prototype"> <property name="patterns"> <list> <value>com.ise.service.*</value> 
-		</list> </property> </bean> <aop:config> <aop:advisor advice-ref="druid-stat-interceptor" 
-		pointcut-ref="druid-stat-pointcut" /> </aop:config> -->
-
-	<bean id="jdbcTemplate"
-		class="org.springframework.jdbc.core.JdbcTemplate">
-		<property name="dataSource" ref="dataSource"></property>
-	</bean>
-
-
-	<!-- redis config start -->
-	<!-- 配置JedisPoolConfig实例 -->
-	<bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
-		<property name="maxIdle" value="${redis.maxIdle}" />
-		<property name="maxTotal" value="${redis.maxActive}" />
-		<property name="maxWaitMillis" value="${redis.maxWait}" />
-		<property name="testOnBorrow" value="${redis.testOnBorrow}" />
-	</bean>
-
-	<!-- 配置JedisConnectionFactory -->
-	<bean id="jedisConnectionFactory"
-		class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
-		<property name="hostName" value="${redis.host}" />
-		<property name="port" value="${redis.port}" />
-		<!-- <property name="password" value="${redis.pass}" /> -->
-		<property name="database" value="${redis.dbIndex}" />
-		<property name="poolConfig" ref="poolConfig" />
-	</bean>
-
-	<!-- 配置RedisTemplate -->
-	<bean id="redisTemplate"
-		class="org.springframework.data.redis.core.RedisTemplate">
-		<property name="connectionFactory"
-			ref="jedisConnectionFactory" />
-	</bean>
-
-	<!-- 配置RedisCacheManager -->
-	<bean id="redisCacheManager"
-		class="org.springframework.data.redis.cache.RedisCacheManager">
-		<constructor-arg name="redisOperations"
-			ref="redisTemplate" />
-		<property name="defaultExpiration"
-			value="${redis.expiration}" />
-	</bean>
-
-	<!-- 配置RedisCacheConfig -->
-	<bean id="redisCacheConfig" class="com.ise.util.RedisCacheConfig">
-		<constructor-arg ref="jedisConnectionFactory" />
-		<constructor-arg ref="redisTemplate" />
-		<constructor-arg ref="redisCacheManager" />
-	</bean>
-
+	<import resource="spring-redis.xml"/>
+	<import resource="spring-mybatis.xml"/>
+	
 </beans>

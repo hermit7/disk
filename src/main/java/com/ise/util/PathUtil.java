@@ -51,6 +51,24 @@ public class PathUtil {
 
 		return list;
 	}
+	
+	public static List<BreadCrumb> getBreadsOfAdmin(String path) {
+		ArrayList<BreadCrumb> list = new ArrayList<>();
+		// path = path.replaceAll("^/[a-z]+/[a-z]+", "");
+		path = path.substring(1);
+		String[] split = path.split("/");
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < split.length; i++) {
+			BreadCrumb crumb = new BreadCrumb();
+			sb.append("/");
+			sb.append(split[i]);
+			crumb.setFolderPath(sb.toString());
+			crumb.setFolderName(split[i]);
+			list.add(crumb);
+		}
+		
+		return list;
+	}
 
 	public static String formatPath(String root, String name) {
 		String result = "";

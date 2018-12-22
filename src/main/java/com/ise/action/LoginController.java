@@ -8,13 +8,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.ise.pojo.User;
-import com.ise.service.userService;
+import com.ise.service.UserService;
 
 @Controller
 public class LoginController {
 
 	@Autowired
-	private userService userService;
+	private UserService userService;
 
 	@RequestMapping("/login")
 	public String login(HttpSession session, String username, String password, Model model) {

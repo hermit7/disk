@@ -17,6 +17,10 @@
 		<ul class="placeul">
 			<%-- 此处放一个面包屑导航 --%>
 			<li><a href="javascript:void(0)" onclick="listShare()">收获分享</a></li>
+			<c:forEach items="${breadlist}" var="bread">
+				<li><a href="javascript:void(0)"
+					onclick="openFile('${bread.folderPath}')">${bread.folderName}</a></li>
+			</c:forEach>
 		</ul>
 	</div>
 	<div class="tools">
@@ -36,7 +40,7 @@
 		</ul>
 
 	</div>
-	
+
 	<table id="tb" class="filetable">
 		<thead>
 			<tr>
@@ -55,7 +59,7 @@
 					<td width="300px"><c:choose>
 							<c:when test="${share.fileType=='d'}">
 								<a href="javascript:void(0)"
-									ondblclick="openFile('${share.filePath}')"> <img
+									ondblclick="enterFolder('${share.filePath}')"> <img
 									src="${basePath }/images/f01.png" /> <input class="fileinput"
 									type="text" value="${share.fileName}" readOnly="readonly">
 								</a>
@@ -115,14 +119,21 @@
 			</c:forEach>
 		</tbody>
 	</table>
-	
+
 	<ul id="tt"></ul>
 
 	<div id="dd"></div>
-	
+
 	<script type="text/javascript">
 		function listShare() {
 			var url = "${basePath}/share/receive.action";
+			var tab = $('#tt', window.parent.document).tabs('getSelected');
+			tab.panel('refresh', url);
+		}
+
+		function enterFolder(path) {
+			console.log(path);
+			var url = "${basePath}/file/enterFoder.action?path=" + path;
 			var tab = $('#tt', window.parent.document).tabs('getSelected');
 			tab.panel('refresh', url);
 		}
@@ -167,7 +178,8 @@
 		}
 
 		function shareShare(path) {
-			var url = '${basePath}/relation/shareUI.action?path=' + path;
+			var url = '${basePath}/relation/shareUI.action?path='
+					+ encodeURIComponent(path);
 			url = encodeURI(url);
 			url = encodeURI(url);
 			console.log(path);
@@ -211,7 +223,8 @@
 		}
 
 		function saveShare(path) {
-			var url = '${basePath}/share/dirTree.action?path=' + path;
+			var url = '${basePath}/share/dirTree.action?path='
+					+ encodeURIComponent(path);
 			url = encodeURI(url);
 			url = encodeURI(url);
 			$('#dd').dialog({

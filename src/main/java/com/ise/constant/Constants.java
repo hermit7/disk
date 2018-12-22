@@ -21,7 +21,7 @@ public class Constants {
 	public static final String[] FRIEND_COLUMN = { "userid", "username", "nickname" };
 
 	// 群组信息表
-	public static final String GROUP_MEMBER_TABLE = "group_memeber";
+	public static final String GROUP_MEMBER_TABLE = "group_member";
 	public static final String GROUP_MEMBER_FAMILY = "group_member_content";
 	public static final String[] GROUP_MEMBER_COLUMN = { "groupName", "groupNumber", "member", "ownerName" };
 

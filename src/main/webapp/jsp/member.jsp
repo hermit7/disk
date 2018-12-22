@@ -11,8 +11,6 @@
 <meta charset="utf-8">
 <title></title>
 <jsp:include page="/jsp/common/public.jsp"></jsp:include>
-<style type="text/css">
-</style>
 </head>
 <body>
 	<input type="hidden" id="groupNumber" value="${groupNumber}">
@@ -28,17 +26,20 @@
 				type="button" value="关闭" onclick="cancel()">
 		</div>
 	</div>
+
 	<script type="text/javascript">
 		$(function() {
 			$('#cc').combobox({
 				url : '${basePath}/relation/showFollows.action',
-				valueField : 'id',
-				textField : 'text'
+				valueField : 'userId',
+				textField : 'username',
 			});
 		});
+	</script>
 
+	<script type="text/javascript">
 		function affirm() {
-			//var userId = $('#cc').combobox('getValue');//下拉框的取Value方法
+			var userId = $('#cc').combobox('getValue');//下拉框的取Value方法
 			var username = $('#cc').combobox('getText');//下拉框的去Text方法 
 			/* if (receiverId == "") {
 				alert("请选择一个用户");
@@ -56,6 +57,7 @@
 					"groupName" : groupName,
 					"groupNumber" : groupNumber,
 					"username" : username,
+					"userId" : userId,
 					"groupOwner" : groupOwner,
 				},
 				success : function(data) {

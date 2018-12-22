@@ -72,7 +72,7 @@ public class ShareController {
 	public String listGroupShare(HttpSession session,String groupNumber,Model model) {
 		User user = (User) session.getAttribute("user");
 		List<Share> shareList = shareService.listGroupShare(groupNumber);
-		Map<String, String> groupInfo = relationService.getGroupInfo(groupNumber, user.getUsername());
+		Map<String, String> groupInfo = relationService.getGroupInfo(groupNumber, user.getUserId());
 		String owner = groupInfo.get("owner");
 		String groupName = groupInfo.get("groupName");
 		model.addAttribute("shareList", shareList);
@@ -138,9 +138,5 @@ public class ShareController {
 		}
 		return flag;
 	}
-	
-
-	
-	
 	
 }

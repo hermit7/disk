@@ -54,6 +54,17 @@
 					id="btn5" href="#" class="easyui-linkbutton"
 					onclick="openProvidedShareUI(this)"
 					data-options="iconCls:'icon-blank',plain:true">我的分享</a><br>
+				<c:if test="${user.type eq 0}">
+					<a id="btn5" href="#" class="easyui-linkbutton"
+						onclick="userManage(this)"
+						data-options="iconCls:'icon-blank',plain:true">用户管理</a>
+					<br>
+					<a id="btn5" href="#" class="easyui-linkbutton"
+						onclick="clusterMonitor(this)"
+						data-options="iconCls:'icon-blank',plain:true">集群监控</a>
+					<br>
+				</c:if>
+
 				<!-- <a
 					id="btn2" href="#" class="easyui-linkbutton"
 					onclick="openPage(this)"
@@ -144,6 +155,32 @@
 
 		//我的分享
 		function openProvidedShareUI(btn) {
+			if ($('#tt').tabs('exists', btn.text)) {
+				$('#tt').tabs("select", btn.text);
+			} else {
+				$('#tt').tabs("add", {
+					title : btn.text,
+					href : '${basePath}/share/provide.action',
+					closable : true,
+					selected : true,
+				});
+			}
+		}
+		//用户管理
+		function userManage(btn) {
+			if ($('#tt').tabs('exists', btn.text)) {
+				$('#tt').tabs("select", btn.text);
+			} else {
+				$('#tt').tabs("add", {
+					title : btn.text,
+					href : '${basePath}/system/userManage.action',
+					closable : true,
+					selected : true,
+				});
+			}
+		}
+		//集群监控
+		function clusterMonitor(btn) {
 			if ($('#tt').tabs('exists', btn.text)) {
 				$('#tt').tabs("select", btn.text);
 			} else {

@@ -11,8 +11,6 @@
 <meta charset="utf-8">
 <title></title>
 <jsp:include page="/jsp/common/public.jsp"></jsp:include>
-<style type="text/css">
-</style>
 </head>
 <body>
 	<form>

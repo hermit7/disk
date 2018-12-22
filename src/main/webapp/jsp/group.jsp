@@ -187,6 +187,9 @@
 			var url = "${basePath}/relation/member.action?groupNumber="
 					+ groupNumber + "&groupName=" + groupName + "&groupOwner="
 					+ owner;
+			console.log(groupNumber);
+			console.log(groupName);
+			console.log(owner);
 			url = encodeURI(url);
 			url = encodeURI(url);
 			$('#dd').dialog({

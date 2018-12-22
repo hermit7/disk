@@ -15,7 +15,6 @@ import org.apache.hadoop.hbase.client.Delete;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.filter.Filter;
-import org.apache.hadoop.hbase.filter.PrefixFilter;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -39,8 +38,7 @@ public class RelationDaoImpl implements RelationDao {
 	 * 展示关注对象的所有信息
 	 */
 	@Override
-	public List<User> listFriends(User user) {
-		Filter filter = new PrefixFilter(Bytes.toBytes(user.getUserId() + "_"));
+	public List<User> listFriends(User user, Filter filter) {
 		ResultScanner rs = hbaseDao.getResultScannerByFilter(Constants.FRIEND_TABLE, filter);
 		List<User> list = new ArrayList<>();
 		User friend = null;
@@ -58,30 +56,6 @@ public class RelationDaoImpl implements RelationDao {
 			friend.setUsername(username);
 			friend.setNickname(nickname);
 			list.add(friend);
-		}
-		return list;
-	}
-
-	/**
-	 * 显示关注对象名称，和id
-	 */
-	@Override
-	public List<Map<String, String>> showFollows(Filter filter) {
-		ResultScanner rs = hbaseDao.getResultScannerByFilter(Constants.FRIEND_TABLE, filter);
-		List<Map<String, String>> list = new ArrayList<>();
-		Map<String, String> map = null;
-		Iterator<Result> iter = rs.iterator();
-		while (iter.hasNext()) {
-			map = new HashMap<>();
-			Result result = iter.next();
-			result.getRow();
-			String userId = Bytes.toString(
-					result.getValue(Bytes.toBytes(Constants.FRIEND_FAMILY), Bytes.toBytes(Constants.FRIEND_COLUMN[0])));
-			String username = Bytes.toString(
-					result.getValue(Bytes.toBytes(Constants.FRIEND_FAMILY), Bytes.toBytes(Constants.FRIEND_COLUMN[1])));
-			map.put("id", userId);
-			map.put("text", username);
-			list.add(map);
 		}
 		return list;
 	}
@@ -146,16 +120,17 @@ public class RelationDaoImpl implements RelationDao {
 	}
 
 	@Override
-	public boolean addUserIntoGroup(String groupName, String groupNumber, String groupOwner, String username) {
-		boolean existed = hbaseDao.recordExisted(Constants.GROUP_MEMBER_TABLE, username + "_" + groupNumber);
+	public boolean addUserIntoGroup(String groupName, String groupNumber, String groupOwner, String userId,
+			String username) {
+		boolean existed = hbaseDao.recordExisted(Constants.GROUP_MEMBER_TABLE, userId + "_" + groupNumber);
 		if (!existed) {
-			hbaseDao.updateOneData(Constants.GROUP_MEMBER_TABLE, username + "_" + groupNumber,
+			hbaseDao.updateOneData(Constants.GROUP_MEMBER_TABLE, userId + "_" + groupNumber,
 					Constants.GROUP_MEMBER_FAMILY, Constants.GROUP_MEMBER_COLUMN[0], groupName);
-			hbaseDao.updateOneData(Constants.GROUP_MEMBER_TABLE, username + "_" + groupNumber,
+			hbaseDao.updateOneData(Constants.GROUP_MEMBER_TABLE, userId + "_" + groupNumber,
 					Constants.GROUP_MEMBER_FAMILY, Constants.GROUP_MEMBER_COLUMN[1], groupNumber);
-			hbaseDao.updateOneData(Constants.GROUP_MEMBER_TABLE, username + "_" + groupNumber,
+			hbaseDao.updateOneData(Constants.GROUP_MEMBER_TABLE, userId + "_" + groupNumber,
 					Constants.GROUP_MEMBER_FAMILY, Constants.GROUP_MEMBER_COLUMN[2], username);
-			hbaseDao.updateOneData(Constants.GROUP_MEMBER_TABLE, username + "_" + groupNumber,
+			hbaseDao.updateOneData(Constants.GROUP_MEMBER_TABLE, userId + "_" + groupNumber,
 					Constants.GROUP_MEMBER_FAMILY, Constants.GROUP_MEMBER_COLUMN[3], groupOwner);
 		}
 		return true;
@@ -180,26 +155,6 @@ public class RelationDaoImpl implements RelationDao {
 			group.setGroupNumber(groupnumber);
 			group.setOwner(owner);
 			list.add(group);
-		}
-		return list;
-	}
-
-	@Override
-	public List<Map<String, String>> showGroups(Filter filter) {
-		ResultScanner rs = hbaseDao.getResultScannerByFilter(Constants.GROUP_MEMBER_TABLE, filter);
-		List<Map<String, String>> list = new ArrayList<>();
-		Iterator<Result> iter = rs.iterator();
-		Map<String, String> map = null;
-		while (iter.hasNext()) {
-			Result result = iter.next();
-			map = new HashMap<>();
-			String groupName = Bytes.toString(result.getValue(Bytes.toBytes(Constants.GROUP_MEMBER_FAMILY),
-					Bytes.toBytes(Constants.GROUP_MEMBER_COLUMN[0])));
-			String groupNumber = Bytes.toString(result.getValue(Bytes.toBytes(Constants.GROUP_MEMBER_FAMILY),
-					Bytes.toBytes(Constants.GROUP_MEMBER_COLUMN[1])));
-			map.put("id", groupNumber);
-			map.put("text", groupName);
-			list.add(map);
 		}
 		return list;
 	}

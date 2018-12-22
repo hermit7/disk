@@ -18,7 +18,7 @@
 			<%-- 此处放一个面包屑导航 --%>
 			<li><a href="javascript:void(0)" onclick="listGroup()">我的群组</a></li>
 			<li><a href="javascript:void(0)"
-				onclick="listMember'${groupNumber}')">${groupName}</a></li>
+				onclick="listMember('${groupNumber}')">${groupName}</a></li>
 		</ul>
 	</div>
 	<div class="tools">

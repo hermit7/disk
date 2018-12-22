@@ -55,6 +55,11 @@ public class RelationController {
 
 	@RequestMapping(value = "/shareUI")
 	public String relation(String path, Model model) {
+		try {
+			path = URLDecoder.decode(path, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
 		model.addAttribute("path", path);
 		return "/jsp/share.jsp";
 	}
@@ -75,8 +80,8 @@ public class RelationController {
 
 	@RequestMapping(value = "/addGroupMember")
 	@ResponseBody
-	public boolean addMember(String groupName, String groupNumber, String groupOwner, String username) {
-		return relationService.addGroupMemeber(groupName, groupNumber, groupOwner, username);
+	public boolean addMember(String groupName, String groupNumber, String groupOwner, String userId, String username) {
+		return relationService.addGroupMemeber(groupName, groupNumber, groupOwner, userId, username);
 	}
 
 	/**
@@ -87,12 +92,12 @@ public class RelationController {
 	 */
 	@RequestMapping(value = "/showFollows")
 	@ResponseBody
-	public List<Map<String, String>> showFollows(HttpSession session) {
+	public List<User> showFollows(HttpSession session) {
 		User user = (User) session.getAttribute("user");
-		List<Map<String, String>> follows = relationService.showFollows(user);
+		List<User> follows = relationService.listFriends(user);
 		return follows;
 	}
-	
+
 	/**
 	 * 展示该用户所关注的用户
 	 * 
@@ -101,9 +106,9 @@ public class RelationController {
 	 */
 	@RequestMapping(value = "/showGroups")
 	@ResponseBody
-	public List<Map<String, String>> showGroups(HttpSession session) {
+	public List<Group> showGroups(HttpSession session) {
 		User user = (User) session.getAttribute("user");
-		List<Map<String, String>> follows = relationService.showGroups(user);
+		List<Group> follows = relationService.listGroups(user);
 		return follows;
 	}
 
@@ -140,8 +145,9 @@ public class RelationController {
 	 */
 	@RequestMapping(value = "/renameGroup")
 	@ResponseBody
-	public boolean renameGroup(String groupNumber, String destName) {
-		return relationService.renameGroup(groupNumber, destName);
+	public boolean renameGroup(HttpSession session, String groupNumber, String destName) {
+		User user = (User) session.getAttribute("user");
+		return relationService.renameGroup(user, groupNumber, destName);
 	}
 
 	/**
@@ -163,8 +169,9 @@ public class RelationController {
 	 */
 	@RequestMapping(value = "/dismissGroup")
 	@ResponseBody
-	public boolean dismissGroup(String groupNumber) {
-		return relationService.dissmissGroup(groupNumber);
+	public boolean dismissGroup(HttpSession session, String groupNumber) {
+		User user = (User) session.getAttribute("user");
+		return relationService.dissmissGroup(user, groupNumber);
 	}
 
 	/**
@@ -176,7 +183,7 @@ public class RelationController {
 	public String listGroupMember(HttpSession session, String groupNumber, Model model) {
 		User user = (User) session.getAttribute("user");
 		List<User> member = relationService.listGroupMember(groupNumber);
-		Map<String, String> groupInfo = relationService.getGroupInfo(groupNumber, user.getUsername());
+		Map<String, String> groupInfo = relationService.getGroupInfo(groupNumber, user.getUserId());
 		String owner = groupInfo.get("owner");
 		String groupName = groupInfo.get("groupName");
 		model.addAttribute("memberList", member);

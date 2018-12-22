@@ -1,11 +1,13 @@
 package com.ise.action;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.ise.pojo.BreadCrumb;
 import com.ise.pojo.HFile;
@@ -32,7 +35,7 @@ public class FileController {
 	private FileService fileService;
 
 	@RequestMapping("/list")
-	public String listFiles(HttpSession session, @RequestParam(value = "path", defaultValue = "/disk/") String path,
+	public String listFiles(HttpSession session, @RequestParam(value = "path", defaultValue = "/") String path,
 			Model model) {
 		try {
 			path = URLDecoder.decode(path, "UTF-8");
@@ -40,16 +43,45 @@ public class FileController {
 			e.printStackTrace();
 		}
 		User user = (User) session.getAttribute("user");
-		if ("/disk/".equals(path)) {
-			path = path + user.getUsername();
+		List<BreadCrumb> breads = null;
+		if ("0".equals(user.getType())) {
+			breads = PathUtil.getBreadsOfAdmin(path);
+		} else {
+			if(!path.contains("/disk/")) {
+				path = "/disk/" + user.getUsername();
+			}
+			breads = PathUtil.getBreads(path);
 		}
 		List<HFile> files = fileService.listFiles(path);
-		List<BreadCrumb> breads = PathUtil.getBreads(path);
 		model.addAttribute("fileList", files);
 		model.addAttribute("breadlist", breads);
 		model.addAttribute("currentPath", path);
 		// System.out.println("当前路径:"+path);
 		return "/jsp/filelist.jsp";
+	}
+
+	@RequestMapping(value = "/enterFoder")
+	public String enterFoder(HttpSession session, String path, Model model) {
+		try {
+			path = URLDecoder.decode(path, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		User user = (User) session.getAttribute("user");
+		List<BreadCrumb> breads = null;
+		if ("0".equals(user.getType())) {
+			breads = PathUtil.getBreadsOfAdmin(path);
+		} else {
+			if(!path.contains("/disk/")) {
+				path = "/disk/" + user.getUsername();
+			}
+			breads = PathUtil.getBreads(path);
+		}
+		List<HFile> files = fileService.listFiles(path);
+		model.addAttribute("fileList", files);
+		model.addAttribute("breadlist", breads);
+		model.addAttribute("currentPath", path);
+		return "/jsp/receive.jsp";
 	}
 
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
@@ -71,6 +103,34 @@ public class FileController {
 			e.printStackTrace();
 		}
 		return flag;
+	}
+
+	@RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
+	public void uploadFile2(HttpServletResponse response, @RequestParam(value = "filename") CommonsMultipartFile file,
+			@RequestParam(value = "curPath") String curPath, Model model) {
+		boolean flag = false;
+		PrintWriter out = null;
+		if (file == null) {
+			System.out.println("file is empty");
+		}
+		// System.out.println("上传路径:"+ curPath);
+		long size = file.getSize() / 65536;
+		String name = file.getOriginalFilename();
+		// System.out.println("文件名:"+name);
+		try {
+			curPath = URLDecoder.decode(curPath, "UTF-8");
+			flag = fileService.uploadFile(file.getInputStream(), curPath, name, size);
+			out = response.getWriter();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		if (out != null) {
+			if (flag == true) {
+				out.print("1");
+			} else {
+				out.print("2");
+			}
+		}
 	}
 
 	@RequestMapping(value = "/modify")

@@ -11,8 +11,6 @@
 <meta charset="utf-8">
 <title></title>
 <jsp:include page="/jsp/common/public.jsp"></jsp:include>
-<style type="text/css">
-</style>
 </head>
 <body>
 	<input type="hidden" id="path" value="${path}">
@@ -38,14 +36,14 @@
 		$(function() {
 			$('#cc').combobox({
 				url : '${basePath}/relation/showFollows.action',
-				valueField : 'id',
-				textField : 'text'
+				valueField : 'userId',
+				textField : 'username'
 			});
 
 			$('#gg').combobox({
 				url : '${basePath}/relation/showGroups.action',
-				valueField : 'id',
-				textField : 'text'
+				valueField : 'groupNumber',
+				textField : 'groupName'
 			});
 		});
 
@@ -77,18 +75,19 @@
 							showType : 'slide'
 						});
 					}
+
+					$('#dd', window.parent.document).dialog('close');
 				},
 			});
-			$('#dd', window.parent.document).dialog('close');
 		}
-		
+
 		function addGroupShare() {
 			var groupNumber = $('#gg').combobox('getValue');//下拉框的取Value方法
 			var groupName = $('#gg').combobox('getText');//下拉框的去Text方法 
 			/* if (receiverId == "") {
 				alert("请选择一个用户");
 			} */
-			var path = $("#path").val(); 
+			var path = $("#path").val();
 			console.log(groupNumber);
 			console.log(groupName);
 			console.log(path);
@@ -110,9 +109,9 @@
 							showType : 'slide'
 						});
 					}
+			$('#dd', window.parent.document).dialog('close');
 				},
 			});
-			$('#dd', window.parent.document).dialog('close');
 		}
 
 		function cancel() {

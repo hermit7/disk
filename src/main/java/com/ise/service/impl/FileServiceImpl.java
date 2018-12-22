@@ -15,7 +15,7 @@ import com.ise.service.FileService;
 
 @Service("fileService")
 public class FileServiceImpl implements FileService {
-
+	
 	@Autowired
 	private HdfsDao hdfsDao;
 
