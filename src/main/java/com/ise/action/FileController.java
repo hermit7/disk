@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+import com.ise.constant.Constants;
 import com.ise.pojo.BreadCrumb;
 import com.ise.pojo.HFile;
 import com.ise.pojo.HdfsFolder;
@@ -44,10 +44,10 @@ public class FileController {
 		}
 		User user = (User) session.getAttribute("user");
 		List<BreadCrumb> breads = null;
-		if ("0".equals(user.getType())) {
+		if ("0".equals(user.getUserType())) {
 			breads = PathUtil.getBreadsOfAdmin(path);
 		} else {
-			if(!path.contains("/disk/")) {
+			if (!path.contains("/disk/")) {
 				path = "/disk/" + user.getUsername();
 			}
 			breads = PathUtil.getBreads(path);
@@ -69,10 +69,10 @@ public class FileController {
 		}
 		User user = (User) session.getAttribute("user");
 		List<BreadCrumb> breads = null;
-		if ("0".equals(user.getType())) {
+		if ("0".equals(user.getUserType())) {
 			breads = PathUtil.getBreadsOfAdmin(path);
 		} else {
-			if(!path.contains("/disk/")) {
+			if (!path.contains("/disk/")) {
 				path = "/disk/" + user.getUsername();
 			}
 			breads = PathUtil.getBreads(path);
@@ -84,45 +84,33 @@ public class FileController {
 		return "/jsp/receive.jsp";
 	}
 
-	@RequestMapping(value = "/upload", method = RequestMethod.POST)
-	@ResponseBody
-	public boolean uploadFile(@RequestParam(value = "filename") MultipartFile file,
-			@RequestParam(value = "curPath") String curPath, Model model) {
-		boolean flag = false;
-		if (file == null) {
-			System.out.println("file is empty");
-		}
-		// System.out.println("上传路径:"+ curPath);
-		long size = file.getSize() / 65536;
-		String name = file.getOriginalFilename();
-		// System.out.println("文件名:"+name);
-		try {
-			curPath = URLDecoder.decode(curPath, "UTF-8");
-			flag = fileService.uploadFile(file.getInputStream(), curPath, name, size);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return flag;
-	}
-
 	@RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
-	public void uploadFile2(HttpServletResponse response, @RequestParam(value = "filename") CommonsMultipartFile file,
-			@RequestParam(value = "curPath") String curPath, Model model) {
+	public void uploadFile2(HttpSession session, HttpServletResponse response,
+			@RequestParam(value = "filename") CommonsMultipartFile file,
+			@RequestParam(value = "curPath") String curPath) {
 		boolean flag = false;
 		PrintWriter out = null;
+		User user = (User) session.getAttribute("user");
+		long usedSpace = user.getUsedSpace();
 		if (file == null) {
 			System.out.println("file is empty");
+			return;
 		}
-		// System.out.println("上传路径:"+ curPath);
-		long size = file.getSize() / 65536;
 		String name = file.getOriginalFilename();
-		// System.out.println("文件名:"+name);
-		try {
-			curPath = URLDecoder.decode(curPath, "UTF-8");
-			flag = fileService.uploadFile(file.getInputStream(), curPath, name, size);
-			out = response.getWriter();
-		} catch (IOException e) {
-			e.printStackTrace();
+		long size = file.getSize() / 1024;
+		if (usedSpace < Constants.DEFAULT_MAX_SPACE_KBIT) {
+			usedSpace += size;
+			user.setUsedSpace(usedSpace);
+			session.setAttribute("user", user);
+			try {
+				curPath = URLDecoder.decode(curPath, "UTF-8");
+				flag = fileService.uploadFile(file.getInputStream(), curPath, name, user.getUserId(), usedSpace);
+				out = response.getWriter();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else {
+			return;
 		}
 		if (out != null) {
 			if (flag == true) {
@@ -141,8 +129,12 @@ public class FileController {
 
 	@RequestMapping(value = "/delete")
 	@ResponseBody
-	public boolean deleteFile(String path) {
-		return fileService.deleteFile(path);
+	public boolean deleteFile(HttpSession session, String path) {
+		User user = (User) session.getAttribute("user");
+		long size = fileService.deleteFile(user.getUserId(), path);
+		user.setUsedSpace(user.getUsedSpace() - size);
+		session.setAttribute("user", user);
+		return size > 0 ? true : false;
 	}
 
 	@RequestMapping(value = "/mkdir")

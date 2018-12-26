@@ -84,4 +84,12 @@ public class HdfsTest {
 		Path dst = new Path("/test23");
 		FileUtil.copy(HdfsConn.getFileSystem(), src, HdfsConn.getFileSystem(), dst, true, conf);
 	}
+	
+	
+	@Test
+	public void testPathSize() throws IOException {
+		Path path = new Path("/disk/lilei/传智播放器.rar");
+		long length = fs.getContentSummary(path).getLength();
+		System.out.println(length);
+	}
 }

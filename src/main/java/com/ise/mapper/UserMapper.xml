@@ -7,15 +7,13 @@
 			property="username" />
 		<result column="password" jdbcType="VARCHAR"
 			property="password" />
-		<result column="remain_space" jdbcType="VARCHAR"
-			property="space" />
-		<result column="user_type" jdbcType="VARCHAR" property="type" />
-		<result column="nick_name" jdbcType="VARCHAR"
-			property="nickname" />
+		<result column="used_space" jdbcType="VARCHAR"
+			property="usedSpace" />
+		<result column="user_type" jdbcType="VARCHAR" property="userType" />
 	</resultMap>
 
 	<select id="login" resultMap="BaseResultUserMap">
-		SELECT `user_id`,`user_name`,`password`,`remain_space`,`user_type` 
+		SELECT `user_id`,`user_name`,`password`,`used_space`,`user_type` 
 		FROM `user`
 		WHERE `user_name` = #{username}
 		AND `password` = #{password}
@@ -26,18 +24,29 @@
 		WHERE `user_name` = #{username}
 	</select>
 	
-	<select id="findAllUsers" resultType="User">
-		SELECT `user_id`,`user_name`,`password`,`remain_space`,`user_type` 
+	<select id="findAllUsers" resultMap="BaseResultUserMap">
+		SELECT `user_id`,`user_name`,`password`,`used_space`,`user_type` 
 		FROM `user`
 	</select>
 	
 	<insert id="addUser" parameterType="User">
-		INSERT INTO `user`(`user_name`,`password`,`remain_space`,`user_type`) 
-		values(#{username},#{password},#{space},#{type}) 
+		INSERT INTO `user`(`user_name`,`password`,`used_space`,`user_type`) 
+		values(#{username},#{password},#{usedSpace},#{userType}) 
 	</insert>
 	
 	<delete id="deleteUser" parameterType="Integer">
 		DELETE FROM `user` WHERE `user_id` = ${userId}
 	</delete>
+	
+	
+	<update id="increaseUsedSpace">
+		UPDATE `user` set `used_space` = `used_space` + #{size}
+		WHERE `user_id` = #{userId}
+	</update>
+	
+	<update id="decreaseUsedSpace">
+		UPDATE `user` set `used_space` = `used_space` - #{size}
+		WHERE `user_id` = #{userId}
+	</update>
 	
 </mapper>

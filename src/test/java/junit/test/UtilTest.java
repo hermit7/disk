@@ -1,9 +1,11 @@
 package junit.test;
 
+import java.text.NumberFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.junit.Test;
+
 
 public class UtilTest {
 
@@ -28,5 +30,14 @@ public class UtilTest {
 		Matcher ma = pattern.matcher(str);
 		System.out.println(ma.group());
 		//System.out.println(split.length);
+	}
+	
+	@Test
+	public void testNum() {
+		NumberFormat numberFormat = NumberFormat.getInstance();
+		numberFormat.setMaximumFractionDigits(2);
+		double aa = Long.parseLong("104226879") / ((100 * 1024 * 1024) * 1.0);
+		String percent = numberFormat.format(aa);
+		System.out.println(percent);
 	}
 }

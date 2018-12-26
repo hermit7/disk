@@ -48,35 +48,39 @@
 		<span>位置：</span>
 		<ul class="placeul">
 			<%-- 此处放一个面包屑导航 --%>
-			<li><a href="javascript:void(0)"
-				onclick="openFile('/')">我的网盘</a></li>
+			<li>
+				<a href="javascript:void(0)" onclick="openFile('/')">我的网盘</a>
+			</li>
 			<c:forEach items="${breadlist}" var="bread">
-				<li><a href="javascript:void(0)"
-					onclick="openFile('${bread.folderPath}')">${bread.folderName}</a></li>
+				<li>
+					<a href="javascript:void(0)" onclick="openFile('${bread.folderPath}')">${bread.folderName}</a>
+				</li>
 			</c:forEach>
 			<!-- <li><a href="javascript:void(0)" onclick="openFile('/')">列表</a></li> -->
 		</ul>
+		<div id="p" style="width: 400px; float: right; margin: 8px 2px 2px"></div>
 	</div>
 	<div class="tools">
 		<ul class="toolbar">
-			<li class="upload"><span><img
-					src="${basePath }/images/upload_1.png"
-					style="width: 30px; height: 28px" /></span>上传</li>
-			<li class="download" onclick="downloadFiles()"><span><img
-					src="${basePath }/images/download_1.png"
-					style="width: 30px; height: 28px" /></span>下载</li>
-			<li class="share" onclick="shareFiles()"><span><img
-					src="${basePath }/images/share_1.png"
-					style="width: 30px; height: 28px" /></span>分享</li>
-			<li class="delete"><span><img
-					src="${basePath }/images/delete_1.png"
-					style="width: 30px; height: 28px" /></span>删除</li>
-			<li class="newfolder"><span><img
-					src="${basePath }/images/new_file.png"
-					style="width: 30px; height: 28px" /></span>新建文件夹</li>
-			<li><input type="text" style="height: 30px; border: none"><span><img
-					src="${basePath }/images/search.png"
-					style="width: 30px; height: 28px" /></span></li>
+			<li class="upload">
+				<span><img src="${basePath }/images/upload_1.png" style="width: 30px; height: 28px" /></span>上传
+			</li>
+			<li class="download" onclick="downloadFiles()">
+				<span><img src="${basePath }/images/download_1.png" style="width: 30px; height: 28px" /></span>下载
+			</li>
+			<li class="share" onclick="shareFiles()">
+				<span><img src="${basePath }/images/share_1.png" style="width: 30px; height: 28px" /></span>分享
+			</li>
+			<li class="delete">
+				<span><img src="${basePath }/images/delete_1.png" style="width: 30px; height: 28px" /></span>删除
+			</li>
+			<li class="newfolder">
+				<span><img src="${basePath }/images/new_file.png" style="width: 30px; height: 28px" /></span>新建文件夹
+			</li>
+			<li>
+				<input type="text" style="height: 30px; border: none">
+				<span><img src="${basePath }/images/search.png" style="width: 30px; height: 28px" /></span>
+			</li>
 		</ul>
 
 	</div>
@@ -97,58 +101,47 @@
 					<td><input id="box" name="" type="checkbox" value="" /></td>
 					<td width="500px"><c:choose>
 							<c:when test="${file.type=='d'}">
-								<a href="javascript:void(0)"
-									ondblclick="openFile('${file.path}')"> <img
-									src="${basePath }/images/f01.png" /> <input class="fileinput"
-									type="text" value="${file.name}" readonly="readonly">
+								<a href="javascript:void(0)" ondblclick="openFile('${file.path}')">
+									<img src="${basePath }/images/f01.png" />
+									<input class="fileinput" type="text" value="${file.name}" readonly="readonly">
 								</a>
 							</c:when>
 							<c:when test="${file.type=='p'}">
 								<img src="${basePath }/images/f07.png" />
-								<input class="fileinput" type="text" value="${file.name}"
-									readOnly="readonly">
+								<input class="fileinput" type="text" value="${file.name}" readOnly="readonly">
 							</c:when>
 							<c:when test="${file.type=='v'}">
 								<img src="${basePath }/images/f10.png" />
-								<input class="fileinput" type="text" value="${file.name}"
-									readOnly="readonly">
+								<input class="fileinput" type="text" value="${file.name}" readOnly="readonly">
 							</c:when>
 							<c:when test="${file.type=='z'}">
 								<img src="${basePath }/images/f02.png" />
-								<input class="fileinput" type="text" value="${file.name}"
-									readOnly="readonly">
+								<input class="fileinput" type="text" value="${file.name}" readOnly="readonly">
 							</c:when>
 							<c:when test="${file.type=='t'}">
 								<img src="${basePath }/images/f03.png" />
-								<input class="fileinput" type="text" value="${file.name}"
-									readOnly="readonly">
+								<input class="fileinput" type="text" value="${file.name}" readOnly="readonly">
 							</c:when>
 							<c:when test="${file.type=='m'}">
 								<img src="${basePath }/images/f08.png" />
-								<input class="fileinput" type="text" value="${file.name}"
-									readOnly="readonly">
+								<input class="fileinput" type="text" value="${file.name}" readOnly="readonly">
 							</c:when>
 							<c:when test="${file.type=='o'}">
 								<img src="${basePath }/images/f09.png" />
-								<input class="fileinput" type="text" style="width: 300px;"
-									value="${file.name}" readOnly="readonly">
+								<input class="fileinput" type="text" style="width: 300px;" value="${file.name}"
+									readOnly="readonly">
 							</c:when>
 						</c:choose></td>
 					<td>
 						<div class="action">
-							<img src="${basePath }/images/modify.png"
-								onclick="modifyFile(this)" style="width: 20px; height: 25px"
-								title="修改"> <img src="${basePath }/images/delete.png"
-								onclick="deleteFile('${file.path}')"
-								style="width: 20px; height: 25px" title="删除"> <img
-								src="${basePath }/images/share.png"
-								onclick="shareFile('${file.path}')"
-								style="width: 20px; height: 25px" title="分享"> <img
-								src="${basePath }/images/download.png"
-								onclick="downloadFile('${file.path}')"
-								style="width: 20px; height: 25px" title="下载"> <img
-								src="${basePath }/images/more.png" onclick="moveFile(this)"
-								style="width: 20px; height: 25px" title="更多">
+							<img src="${basePath }/images/modify.png" onclick="modifyFile(this)"
+								style="width: 20px; height: 25px" title="修改"> <img
+								src="${basePath }/images/delete.png" onclick="deleteFile('${file.path}')"
+								style="width: 20px; height: 25px" title="删除"> <img src="${basePath }/images/share.png"
+								onclick="shareFile('${file.path}')" style="width: 20px; height: 25px" title="分享"> <img
+								src="${basePath }/images/download.png" onclick="downloadFile('${file.path}')"
+								style="width: 20px; height: 25px" title="下载"> <img src="${basePath }/images/more.png"
+								onclick="moveFile(this)" style="width: 20px; height: 25px" title="更多">
 						</div>
 					</td>
 					<td>${file.time }</td>
@@ -162,13 +155,12 @@
 		<div class="tiptop">
 			<span>上传文件</span>
 		</div>
-		<form id="fileForm" action="./uploadServlet" method="POST"
-			enctype="multipart/form-data">
+		<form id="fileForm" action="./uploadServlet" method="POST" enctype="multipart/form-data">
 			<div class="tipinfo">
 				<div class="tipright">
 					<p>请选择需要上传的文件</p>
-					<input id="uploadFile" type="file" name="filename"
-						onchange="doValidate()"><br>
+					<input id="uploadFile" type="file" name="filename" onchange="doValidate()">
+					<br>
 				</div>
 				<div id="progressBar">
 					<div id="progress"></div>
@@ -176,9 +168,9 @@
 				<span id="fileTip"></span><span id="proInfo">上传进度：0%</span>
 			</div>
 			<div class="tipbtn">
-				<input name="" class="sure" type="button" onclick="upload()"
-					value="上传" />&nbsp; <input name="" type="button" class="cancel"
-					value="取消" />
+				<input name="" class="sure" type="button" onclick="upload()" value="上传" />
+				&nbsp;
+				<input name="" type="button" class="cancel" value="取消" />
 			</div>
 		</form>
 	</div>
@@ -190,27 +182,35 @@
 		<form id="folderForm" method="POST">
 			<div class="tipinfo2">
 				<div class="tipright2">
-					<input type="text" name="folder"
-						style="height: 30px; position: center" placeholder="请输入文件夹名"><br>
+					<input type="text" name="folder" style="height: 30px; position: center" placeholder="请输入文件夹名">
+					<br>
 				</div>
 			</div>
 			<div class="tipbtn2">
-				<input name="" type="button" class="sure2" onclick="mkdir()"
-					value="确认" />&nbsp; <input name="" type="button" class="cancel2"
-					value="取消" />
+				<input name="" type="button" class="sure2" onclick="mkdir()" value="确认" />
+				&nbsp;
+				<input name="" type="button" class="cancel2" value="取消" />
 			</div>
 		</form>
 	</div>
 
 	<div id="dd"></div>
 
-	<div id="mm" class="easyui-menu" data-options="onClick:menuHandler"
-		style="width: 80px;">
+	<div id="mm" class="easyui-menu" data-options="onClick:menuHandler" style="width: 80px;">
 		<div data-options="name:'copy'">复制到</div>
 		<div data-options="name:'move'">移动到</div>
 	</div>
 
 	<script type="text/javascript">
+		$(function() {
+			$('#p').progressbar({
+				width : 195,
+				value : '${user.value}',
+				text : '${user.text}',
+			});
+
+		});
+
 		function openFile(path) {
 			var url = "${basePath}/file/list.action?path=" + path;
 			url = encodeURI(url);

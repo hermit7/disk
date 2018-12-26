@@ -1,15 +1,21 @@
 package com.ise.util;
 
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.ise.constant.Constants;
+
 public class MyFileUtil {
 	static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
+	static NumberFormat numberFormat = NumberFormat.getInstance();
+
 	static Map<String, String> map = new HashMap<>();
 	static {
+		numberFormat.setMaximumFractionDigits(2);
 		// 图片 picture
 		map.put("jpg", "p");
 		map.put("png", "p");
@@ -87,7 +93,19 @@ public class MyFileUtil {
 		return type;
 	}
 
+	public static String getPercentSpace(long usedSpace) {
+		String percent = numberFormat.format(usedSpace / (1024 * 1024) * 1.0);
+		return percent;
+	}
+
+	public static String getUsedSpace(long usedSpace) {
+		String result = fileSizeFormat(usedSpace * 1024l);
+		return result + "/" + Constants.DEFAULT_MAX_SPACE + "G";
+	}
+
 	public static void main(String[] args) {
-		System.out.println(getFileType("dhwjadadjk.gz"));
+		System.out.println(getPercentSpace(104786670));
+		System.out.println(getUsedSpace(104786670));
+		
 	}
 }

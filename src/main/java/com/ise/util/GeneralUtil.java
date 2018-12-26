@@ -11,6 +11,10 @@ public class GeneralUtil {
 		String result = sdf.format(date);
 		return result;
 	}
+
+	public static long unitConvert(String space) {
+		return 1l;
+	}
 	
 	public static void main(String[] args) {
 		System.out.println(formatDate(new Date()));

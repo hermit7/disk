@@ -106,7 +106,7 @@ public class HdfsDaoImpl implements HdfsDao {
 	 * 上传文件
 	 */
 	@Override
-	public boolean uploadFile(InputStream in, String path, String name, long size) {
+	public boolean uploadFile(InputStream in, String path, String name) {
 		String dest = PathUtil.formatPath(path, name);
 		Path dst = new Path(dest);
 		boolean flag = true;
@@ -167,7 +167,8 @@ public class HdfsDaoImpl implements HdfsDao {
 		}
 		return flag;
 	}
-
+	
+	
 	/**
 	 * 用户新建文件夹
 	 */
@@ -227,5 +228,15 @@ public class HdfsDaoImpl implements HdfsDao {
 			e.printStackTrace();
 		}
 		return flag;
+	}
+
+	@Override
+	public long getPathSize(String path) {
+		try {
+			return fs.getContentSummary(new Path(path)).getLength();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return 0;
 	}
 }

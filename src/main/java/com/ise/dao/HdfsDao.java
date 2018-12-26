@@ -9,7 +9,7 @@ import com.ise.pojo.HdfsFolder;
 public interface HdfsDao {
 	public List<HFile> listFiles(String path);
 
-	public boolean uploadFile(InputStream in, String path, String name, long size);
+	public boolean uploadFile(InputStream in, String path, String name);
 
 	public boolean modifyFile(String curPath, String originName, String destName);
 
@@ -30,4 +30,6 @@ public interface HdfsDao {
 	public boolean isPathExist(String path);
 	
 	public HFile getFileStatus(String path);
+	
+	public long getPathSize(String path);
 }

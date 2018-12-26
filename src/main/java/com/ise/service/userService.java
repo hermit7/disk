@@ -10,5 +10,5 @@ public interface UserService {
 
 	User existUser(String username, String password);
 
-	List<User> listUsers();
+	List<User> listAllUsers();
 }

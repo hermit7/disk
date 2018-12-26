@@ -33,7 +33,7 @@
 	<bean id="multipartResolver"
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<!-- 配置文件（每次上传的所有文件总大小)大小,单位为b, 1024000表示1000kb -->
-		<property name="maxUploadSize" value="102400000000" />
+		<property name="maxUploadSize" value="1024000000" />
 	</bean>
 
 

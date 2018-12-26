@@ -19,7 +19,7 @@ public class SystemAction {
 	
 	@RequestMapping("/userManage")
 	public String userManage(Model model) {
-		List<User> list = userService.listUsers();
+		List<User> list = userService.listAllUsers();
 		model.addAttribute("userList", list);
 		return "/jsp/usermanager.jsp";
 	}

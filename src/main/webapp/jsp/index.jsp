@@ -13,17 +13,19 @@
 <meta charset="UTF-8">
 </head>
 <body class="easyui-layout">
-	<div data-options="region:'north',split:true,minHeight:95,maxHeight:95"
-		style="height: 95px;">
-		<div class="header"
-			style="background: url(${basePath}/images/topbg.gif) repeat-x">
+	<div data-options="region:'north',split:true,minHeight:95,maxHeight:95" style="height: 95px;">
+		<div class="header" style="background: url(${basePath}/images/topbg.gif) repeat-x">
 			<div class="topleft">
-				<a href="#"><img src="${basePath}/images/logo.png" title="系统首页" /></a>
+				<a href="#">
+					<img src="${basePath}/images/logo.png" title="系统首页" />
+				</a>
 			</div>
 
 			<div class="topright">
 				<ul>
-					<li><a href="/login.html">退出</a></li>
+					<li>
+						<a href="/login.html">退出</a>
+					</li>
 				</ul>
 
 				<div class="user">
@@ -32,66 +34,34 @@
 			</div>
 		</div>
 	</div>
-	<div data-options="region:'west',split:true,minWidth:200,maxWidth:200"
-		style="width: 200px;">
-		<div id="aa" class="easyui-accordion" data-options="fit:true"
-			style="width: 190px;">
-			<div title="我的网盘"
-				data-options="iconCls:'icon-save',border:false,collapsible:false"
+	<div data-options="region:'west',split:true,minWidth:200,maxWidth:200" style="width: 200px;">
+		<div id="aa" class="easyui-accordion" data-options="" style="width: 200; height: 500">
+			<div title="我的网盘" data-options="iconCls:'icon-save',border:false,collapsible:false"
 				style="padding: 10px">
-				<a id="btn1" href="#" class="easyui-linkbutton"
-					onclick="openFileUI(this)"
-					data-options="iconCls:'icon-blank',plain:true">全部文件</a><br> <a
-					id="btn4" href="#" class="easyui-linkbutton"
-					onclick="openFriendUI(this)"
-					data-options="iconCls:'icon-blank',plain:true">我的关注</a><br> <a
-					id="btn5" href="#" class="easyui-linkbutton"
-					onclick="openGroupUI(this)"
-					data-options="iconCls:'icon-blank',plain:true">共享群组</a><br> <a
-					id="btn5" href="#" class="easyui-linkbutton"
-					onclick="openReceivedShareUI(this)"
-					data-options="iconCls:'icon-blank',plain:true">收获分享</a><br> <a
-					id="btn5" href="#" class="easyui-linkbutton"
-					onclick="openProvidedShareUI(this)"
-					data-options="iconCls:'icon-blank',plain:true">我的分享</a><br>
-				<c:if test="${user.type eq 0}">
-					<a id="btn5" href="#" class="easyui-linkbutton"
-						onclick="userManage(this)"
+				<a id="btn1" href="#" class="easyui-linkbutton" onclick="openFileUI(this)"
+					data-options="iconCls:'icon-blank',plain:true">全部文件</a>
+				<br>
+				<a id="btn4" href="#" class="easyui-linkbutton" onclick="openFriendUI(this)"
+					data-options="iconCls:'icon-blank',plain:true">我的关注</a>
+				<br>
+				<a id="btn5" href="#" class="easyui-linkbutton" onclick="openGroupUI(this)"
+					data-options="iconCls:'icon-blank',plain:true">共享群组</a>
+				<br>
+				<a id="btn5" href="#" class="easyui-linkbutton" onclick="openReceivedShareUI(this)"
+					data-options="iconCls:'icon-blank',plain:true">收获分享</a>
+				<br>
+				<a id="btn5" href="#" class="easyui-linkbutton" onclick="openProvidedShareUI(this)"
+					data-options="iconCls:'icon-blank',plain:true">我的分享</a>
+				<br>
+				<c:if test="${user.userType eq 0}">
+					<a id="btn5" href="#" class="easyui-linkbutton" onclick="userManage(this)"
 						data-options="iconCls:'icon-blank',plain:true">用户管理</a>
 					<br>
-					<a id="btn5" href="#" class="easyui-linkbutton"
-						onclick="clusterMonitor(this)"
-						data-options="iconCls:'icon-blank',plain:true">集群监控</a>
-					<br>
 				</c:if>
-
-				<!-- <a
-					id="btn2" href="#" class="easyui-linkbutton"
-					onclick="openPage(this)"
-					data-options="iconCls:'icon-blank',plain:true">种子</a><br> <a
-					id="btn3" href="#" class="easyui-linkbutton"
-					onclick="openPage(this)"
-					data-options="iconCls:'icon-blank',plain:true">文档</a><br> -->
 			</div>
-			<!-- <div title="分享" data-options="iconCls:'icon-save',border:false"
-				style="padding: 10px">
-				<a id="btn4" href="#" class="easyui-linkbutton"
-					onclick="openFriendUI(this)"
-					data-options="iconCls:'icon-blank',plain:true">我的关注</a><br> <a
-					id="btn5" href="#" class="easyui-linkbutton"
-					onclick="openGroupUI(this)"
-					data-options="iconCls:'icon-blank',plain:true">共享群组</a><br> <a
-					id="btn5" href="#" class="easyui-linkbutton"
-					onclick="openReceivedShareUI(this)"
-					data-options="iconCls:'icon-blank',plain:true">收获分享</a><br> <a
-					id="btn5" href="#" class="easyui-linkbutton"
-					onclick="openProvidedShareUI(this)"
-					data-options="iconCls:'icon-blank',plain:true">我的分享</a><br>
-			</div> -->
 		</div>
 	</div>
-	<div data-options="region:'center'"
-		style="padding: 5px; background: #eee;">
+	<div data-options="region:'center'" style="padding: 5px; background: #eee;">
 		<div id="tt" class="easyui-tabs" data-options="fit:true,border:false"
 			style="width: 500px; height: 250px;">
 			<div title="主页" style="padding: 20px;">欢迎使用智慧网盘</div>
@@ -100,6 +70,7 @@
 	</div>
 
 	<script type="text/javascript">
+
 		function openFileUI(btn) {
 			if ($('#tt').tabs('exists', btn.text)) {
 				var tab = $('#tt').tabs("select", btn.text);

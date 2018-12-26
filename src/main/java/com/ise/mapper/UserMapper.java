@@ -14,4 +14,8 @@ public interface UserMapper {
 
 	List<User> findAllUsers();
 
+	void increaseUsedSpace(@Param(value = "userId") String userId, @Param(value = "size") Long size);
+	
+	void decreaseUsedSpace(@Param(value = "userId") String userId, @Param(value = "size") Long size);
+
 }

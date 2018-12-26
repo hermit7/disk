@@ -8,6 +8,9 @@ public class Constants {
 	public static final String ROWKEY_GID = "gid";
 	public static final String FAMILY_GID = "gid";
 	public static final String COLUMN_GID = "gid";
+	
+	public static final long DEFAULT_MAX_SPACE = 100; //单位为G
+	public static final long DEFAULT_MAX_SPACE_KBIT = 100 * 1024 * 1024; //单位为G
 
 	// 保存分享文件信息表
 	public static final String SHARE_TABLE = "share";

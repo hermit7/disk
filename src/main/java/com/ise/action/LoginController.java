@@ -1,11 +1,12 @@
 package com.ise.action;
 
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ise.pojo.User;
 import com.ise.service.UserService;
@@ -17,14 +18,14 @@ public class LoginController {
 	private UserService userService;
 
 	@RequestMapping("/login")
-	public String login(HttpSession session, String username, String password, Model model) {
+	public String login(HttpSession session, String username, String password, RedirectAttributes modelMap) {
 		User user = userService.existUser(username, password);
 		if (user == null) {
-			model.addAttribute("msg", "账号或密码输入不正确");
+			modelMap.addAttribute("msg", "账号或密码输入不正确");
 			return "/login.html";
 		}
 		session.setAttribute("user", user);
-		//此步应该在注册时使用
+		// 此步应该在注册时使用
 		userService.makeUserRoot(user.getUsername());
 		return "redirect:/jsp/index.jsp";
 	}

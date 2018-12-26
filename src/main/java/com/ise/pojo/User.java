@@ -2,6 +2,8 @@ package com.ise.pojo;
 
 import java.io.Serializable;
 
+import com.ise.util.MyFileUtil;
+
 /**
  * 用户
  * 
@@ -15,15 +17,20 @@ public class User implements Serializable {
 	private String username; // 用户名 唯一约束 用来存放用户文件根目录
 	private String userId; // 用户ID 方便外部引用 主键
 	private String password; // 密码
-	private String space; // 用户空间
-	private String type; // 用户类型 普通用户 、管理员
+	private long usedSpace; // 用户空间
+	private String userType; // 用户类型 普通用户 、管理员
 
 	private String nickname; // 备注
+
+	@SuppressWarnings("unused")
+	private String value;
+	@SuppressWarnings("unused")
+	private String text;
 
 	public String getNickname() {
 		return nickname;
 	}
-	
+
 	public String getPassword() {
 		return password;
 	}
@@ -52,20 +59,36 @@ public class User implements Serializable {
 		this.userId = userId;
 	}
 
-	public String getSpace() {
-		return space;
+	public long getUsedSpace() {
+		return usedSpace;
 	}
 
-	public void setSpace(String space) {
-		this.space = space;
+	public void setUsedSpace(long usedSpace) {
+		this.usedSpace = usedSpace;
 	}
 
-	public String getType() {
-		return type;
+	public String getUserType() {
+		return userType;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setUserType(String userType) {
+		this.userType = userType;
+	}
+
+	public String getValue() {
+		return MyFileUtil.getPercentSpace(usedSpace);
+	}
+
+	public void setValue(String value) {
+		this.value = value;
+	}
+
+	public String getText() {
+		return MyFileUtil.getUsedSpace(usedSpace);
+	}
+
+	public void setText(String text) {
+		this.text = text;
 	}
 
 }

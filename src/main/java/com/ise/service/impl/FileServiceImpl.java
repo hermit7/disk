@@ -9,15 +9,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ise.dao.HdfsDao;
+import com.ise.mapper.UserMapper;
 import com.ise.pojo.HFile;
 import com.ise.pojo.HdfsFolder;
 import com.ise.service.FileService;
 
 @Service("fileService")
 public class FileServiceImpl implements FileService {
-	
+
 	@Autowired
 	private HdfsDao hdfsDao;
+
+	@Autowired
+	private UserMapper userMapper;
 
 	@Override
 	public List<HFile> listFiles(String path) {
@@ -33,8 +37,10 @@ public class FileServiceImpl implements FileService {
 	}
 
 	@Override
-	public boolean uploadFile(InputStream in, String path, String name, long size) {
-		return hdfsDao.uploadFile(in, path, name, size);
+	public boolean uploadFile(InputStream in, String path, String name, String userId, long usedSpace) {
+		// 更新usedSpace
+		userMapper.increaseUsedSpace(userId, usedSpace);
+		return hdfsDao.uploadFile(in, path, name);
 	}
 
 	@Override
@@ -43,8 +49,11 @@ public class FileServiceImpl implements FileService {
 	}
 
 	@Override
-	public boolean deleteFile(String path) {
-		return hdfsDao.deleteFile(path);
+	public long deleteFile(String userId,  String path) {
+		long size = hdfsDao.getPathSize(path) / 1024; 
+		userMapper.decreaseUsedSpace(userId, size);
+		hdfsDao.deleteFile(path);
+		return size;
 	}
 
 	@Override
