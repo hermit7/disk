@@ -35,20 +35,20 @@
 			<tr>
 				<th width="5px"><input name="" type="checkbox" value="" /></th>
 				<th>用户昵称</th>
-				<td width="200px"></td>
+				<th width="200px"></th>
 			</tr>
 		</thead>
 		<tbody>
-			<c:forEach items="${memberList}" var="memeber" varStatus="sta">
+			<c:forEach items="${memberList}" var="member" varStatus="sta">
 				<tr class="row">
 					<td><input id="box" name="" type="checkbox" value="" /></td>
 					<td width="300px"><img src="${basePath }/images/friend.png" />
-						<input type="text" value="${memeber.username}" readonly="readonly"></td>
+						<input type="text" value="${member.username}" readonly="readonly"></td>
 					<td>
 						<div class="action">
-							<c:if test="${memeber.username ne user.username}">
+							<c:if test="${member.username ne user.username}">
 								<img src="${basePath }/images/remark.png"
-									onclick="followUser(this)" style="width: 20px; height: 25px"
+									onclick="followUser('${member.userId}', '${member.username}')" style="width: 20px; height: 25px"
 									title="关注">
 							</c:if>
 						</div>
@@ -78,10 +78,8 @@
 		/**
 			关注用户
 		 */
-		function follow() {
+		function followUser(friendId, friendName) {
 			var url = "${basePath}/relation/follow.action";
-			var friendName = $("#searchUser").val();
-			var friendId = $("#followId").val();
 			console.log(friendName);
 			console.log(friendId);
 			$.ajax({

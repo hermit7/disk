@@ -33,9 +33,9 @@
 	<table id="tb" class="filetable">
 		<thead>
 			<tr>
-				<th width="5px"><input name="" type="checkbox" value="" /></th>
+				<th><input name="" type="checkbox" value="" /></th>
 				<th>文件名</th>
-				<td width="200px"></td>
+				<th width="200px"></th>
 				<th>分享日期</th>
 				<th>大小</th>
 				<th>分享对象</th>
@@ -86,7 +86,7 @@
 						<div class="action">
 							<img src="${basePath }/images/delete.png"
 								onclick="deleteShare('${share.shareId}')"
-								style="width: 20px; height: 25px" title="取消分享">
+								title="取消分享">
 						</div>
 					</td>
 					<td>${share.shareTime }</td>

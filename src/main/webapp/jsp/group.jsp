@@ -89,20 +89,20 @@
 								<c:when test="${user.username eq group.owner}">
 									<img src="${basePath }/images/modify.png"
 										onclick="renameGroup(this, '${group.groupNumber}')"
-										style="width: 20px; height: 25px" title="修改群名">
+										 title="修改群名">
 									<img src="${basePath }/images/dismiss.png"
 										onclick="dismissGroup('${group.groupNumber}')"
-										style="width: 20px; height: 25px" title="解散">
+										title="解散">
 								</c:when>
 								<c:otherwise>
 									<img src="${basePath }/images/quit.png"
 										onclick="quitGroup('${group.groupNumber}')"
-										style="width: 20px; height: 25px" title="退出该群">
+										title="退出该群">
 								</c:otherwise>
 							</c:choose>
 							<img src="${basePath }/images/invite.png"
 								onclick="inviteFriend('${group.groupNumber}','${group.groupName }','${ group.owner}')"
-								style="width: 20px; height: 25px" title="邀请">
+								title="邀请">
 						</div>
 					</td>
 					<td><a href="javascript:void(0)" onclick="listMember('${group.groupNumber}')">成员</a>&nbsp; | &nbsp;<a href="javascript:void(0)" onclick="listShare('${group.groupNumber}')">文件</a></td>

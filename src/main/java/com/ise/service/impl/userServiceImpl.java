@@ -9,6 +9,7 @@ import com.ise.dao.HdfsDao;
 import com.ise.mapper.UserMapper;
 import com.ise.pojo.User;
 import com.ise.service.UserService;
+import com.ise.util.MyFileUtil;
 
 @Service("userService")
 public class UserServiceImpl implements UserService {
@@ -35,18 +36,27 @@ public class UserServiceImpl implements UserService {
 	public List<User> listAllUsers() {
 		List<User> users = userMapper.findAllUsers();
 		for (User user : users) {
-			String type = user.getUserType();
-			if("0".equals(type)) {
-				type="管理员";
-			}else if("1".equals(type)) {
-				type="普通用户";
-			}else if("2".equals(type)) {
-				type="已禁用";
-			}
-			user.setUserType(type);
-			user.setUsedSpace(user.getUsedSpace() * 1024);
+			user.setUsedSpace(MyFileUtil.fileSizeFormat(Long.parseLong(user.getUsedSpace()) * 1024));
 		}
 		return users;
+	}
+
+	@Override
+	public boolean banUser(String userId) {
+		return userMapper.banUser(userId);
+	}
+	@Override
+	public boolean permitUser(String userId) {
+		return userMapper.permitUser(userId);
+	}
+
+	@Override
+	public boolean dilatation(String userId) {
+		return userMapper.dilatation(userId);
+	}
+	@Override
+	public boolean reduction(String userId) {
+		return userMapper.reduction(userId);
 	}
 
 }

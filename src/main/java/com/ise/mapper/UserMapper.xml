@@ -9,44 +9,82 @@
 			property="password" />
 		<result column="used_space" jdbcType="VARCHAR"
 			property="usedSpace" />
-		<result column="user_type" jdbcType="VARCHAR" property="userType" />
+		<result column="user_type" jdbcType="VARCHAR"
+			property="userType" />
+		<result column="status" jdbcType="VARCHAR" property="status" />
+		<result column="space_times" jdbcType="VARCHAR"
+			property="spaceTimes" />
 	</resultMap>
 
 	<select id="login" resultMap="BaseResultUserMap">
-		SELECT `user_id`,`user_name`,`password`,`used_space`,`user_type` 
+		SELECT
+		`user_id`,`user_name`,`password`,`used_space`,`user_type`,`space_times`
 		FROM `user`
 		WHERE `user_name` = #{username}
 		AND `password` = #{password}
+		AND `status` = 0
 	</select>
-	
-	<select id="findUser" parameterType="String" resultMap="BaseResultUserMap">
+
+	<select id="findUser" parameterType="String"
+		resultMap="BaseResultUserMap">
 		SELECT `user_id`,`user_name` FROM `user`
-		WHERE `user_name` = #{username}
+		WHERE `user_name` =
+		#{username}
 	</select>
-	
+
 	<select id="findAllUsers" resultMap="BaseResultUserMap">
-		SELECT `user_id`,`user_name`,`password`,`used_space`,`user_type` 
+		SELECT
+		`user_id`,`user_name`,`password`,`used_space`,`user_type`,
+		`status`,`space_times`
 		FROM `user`
 	</select>
-	
+
 	<insert id="addUser" parameterType="User">
-		INSERT INTO `user`(`user_name`,`password`,`used_space`,`user_type`) 
-		values(#{username},#{password},#{usedSpace},#{userType}) 
+		INSERT INTO
+		`user`(`user_name`,`password`,`used_space`,`user_type`)
+		VALUES(#{username},#{password},#{usedSpace},#{userType})
 	</insert>
-	
+
 	<delete id="deleteUser" parameterType="Integer">
-		DELETE FROM `user` WHERE `user_id` = ${userId}
+		DELETE FROM `user` WHERE
+		`user_id` = ${userId}
 	</delete>
-	
-	
+
+	<update id="banUser" parameterType="String">
+		UPDATE `user` SET `status` =
+		1
+		WHERE `user_id` = #{userId}
+	</update>
+
+	<update id="permitUser" parameterType="String">
+		UPDATE `user` SET `status`
+		= 0
+		WHERE `user_id` = #{userId}
+	</update>
+
+	<!-- 扩容 -->
+	<update id="dilatation" parameterType="String">
+		UPDATE `user` SET
+		`space_times` = `space_times` + 1
+		WHERE `user_id` = #{userId}
+	</update>
+	<update id="reduction" parameterType="String">
+		UPDATE `user` SET
+		`space_times` = `space_times` - 1
+		WHERE `user_id` = #{userId}
+	</update>
+
+
 	<update id="increaseUsedSpace">
-		UPDATE `user` set `used_space` = `used_space` + #{size}
+		UPDATE `user` SET `used_space` = `used_space` +
+		#{size}
 		WHERE `user_id` = #{userId}
 	</update>
-	
+
 	<update id="decreaseUsedSpace">
-		UPDATE `user` set `used_space` = `used_space` - #{size}
+		UPDATE `user` SET `used_space` = `used_space` -
+		#{size}
 		WHERE `user_id` = #{userId}
 	</update>
-	
+
 </mapper>

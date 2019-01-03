@@ -20,4 +20,9 @@ public class UserController {
 	public User findUser(String username) {
 		return userDao.findUser(username);
 	}
+	
+	@RequestMapping(value = "/modifyPassword")
+	public String userInfo() {
+		return "/jsp/userInfo.jsp";
+	}
 }

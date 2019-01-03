@@ -6,7 +6,7 @@ ${proPath}@charset "utf-8";
  * e-mail: admin@.com
  */
 *{font-size:9pt;border:0;margin:0;padding:0;}
-body{font-family:'Î¢ÈíÑÅºÚ'; margin:0 auto;min-width:980px;}
+body{font-family:'Î¢ï¿½ï¿½ï¿½Åºï¿½'; margin:0 auto;min-width:980px;}
 ul{display:block;margin:0;padding:0;list-style:none;}
 li{display:block;margin:0;padding:0;list-style: none;}
 img{border:0;}
@@ -254,18 +254,19 @@ h2{font-weight:normal;}
 .dinfo{width:189px;height:15px; background:url(../images/diskbg.png) no-repeat; margin-top:5px; margin-bottom:5px;}
 .dinfo span{background:url(../images/cbg.png) repeat-x; height:15px;}
 .filetable{width:auto;}
-.filetable thead tr{background:#f5f9fb; line-height:40px;}
+.filetable thead tr{background:#f5f9fb; line-height:30px;}
 .filetable thead tr th{text-align:left; text-indent:15px;font-weight:normal;color:#597190;}
-.filetable tbody tr td{text-indent:15px; line-height:25px; white-space:nowrap;}
-.filetable tbody tr td img {margin-right:5px;padding-top: 8px}
+.filetable tbody tr td{text-indent:15px; line-height:30px; white-space:nowrap;}
+ /* .filetable tbody tr td img {margin-right:5px;padding-top: 8px}  */
+.filetable tbody tr td img {margin-right:5px; vertical-align: middle;}
 .tdlast{text-align:right;}
 .filetable tbody tr:hover{background:#E3E3E3;}
 .filetable tbody tr:hover input{background:#E3E3E3;}
 .filetable td div{display: none}
 .filetable tbody tr:hover td div{display: block}
-.fileinput{height:20px; width:auto;}
-.filetable tbody img {opacity: 0.7;filter(alpha=70);}
-.filetable tbody img:hover {opacity: 1;filter(alpha=100);}
+.fileinput{height:20px; width:auto; }
+.filetable tbody img {width:20px;height:20px; opacity: 0.7;filter(alpha=70); }
+.filetable tbody img:hover {width:20px;height:20px; opacity: 1;filter(alpha=100);}
 .action {float: right;}
 
 /*imglist*/

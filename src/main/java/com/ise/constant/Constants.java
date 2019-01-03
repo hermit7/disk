@@ -8,9 +8,9 @@ public class Constants {
 	public static final String ROWKEY_GID = "gid";
 	public static final String FAMILY_GID = "gid";
 	public static final String COLUMN_GID = "gid";
-	
-	public static final long DEFAULT_MAX_SPACE = 100; //单位为G
-	public static final long DEFAULT_MAX_SPACE_KBIT = 100 * 1024 * 1024; //单位为G
+
+	public static final long DEFAULT_MAX_SPACE = 100; // 单位为G
+	public static final long DEFAULT_MAX_SPACE_KBIT = 100 * 1024 * 1024; // 单位为G
 
 	// 保存分享文件信息表
 	public static final String SHARE_TABLE = "share";
@@ -26,7 +26,8 @@ public class Constants {
 	// 群组信息表
 	public static final String GROUP_MEMBER_TABLE = "group_member";
 	public static final String GROUP_MEMBER_FAMILY = "group_member_content";
-	public static final String[] GROUP_MEMBER_COLUMN = { "groupName", "groupNumber", "member", "ownerName" };
+	public static final String[] GROUP_MEMBER_COLUMN = { "groupName", "groupNumber", "memberId", "member",
+			"ownerName" };
 
 	// 群组文件信息表
 	public static final String GROUP_SHARE_TABLE = "group_share";

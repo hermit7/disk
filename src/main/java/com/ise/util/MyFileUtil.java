@@ -93,19 +93,21 @@ public class MyFileUtil {
 		return type;
 	}
 
-	public static String getPercentSpace(long usedSpace) {
-		String percent = numberFormat.format(usedSpace / (1024 * 1024) * 1.0);
+	public static String getPercentSpace(String usedSpace) {
+		long used = Long.parseLong(usedSpace);
+		String percent = numberFormat.format(used / (1024 * 1024) * 1.0);
 		return percent;
 	}
 
-	public static String getUsedSpace(long usedSpace) {
-		String result = fileSizeFormat(usedSpace * 1024l);
-		return result + "/" + Constants.DEFAULT_MAX_SPACE + "G";
+	public static String getUsedSpace(String usedSpace, int times) {
+		long used = Long.parseLong(usedSpace);
+		String result = fileSizeFormat(used * 1024l);
+		return result + "/" + Constants.DEFAULT_MAX_SPACE * times + "G";
 	}
 
 	public static void main(String[] args) {
-		System.out.println(getPercentSpace(104786670));
-		System.out.println(getUsedSpace(104786670));
-		
+		System.out.println(getPercentSpace("104786670"));
+		System.out.println(getUsedSpace("104786670", 2));
+
 	}
 }

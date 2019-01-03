@@ -29,7 +29,7 @@
 				</ul>
 
 				<div class="user">
-					<span>${user.username} </span> <i>消息</i><b>0</b>
+					<span>${user.username}</span><i>消息</i><b>0</b>
 				</div>
 			</div>
 		</div>
@@ -54,10 +54,12 @@
 					data-options="iconCls:'icon-blank',plain:true">我的分享</a>
 				<br>
 				<c:if test="${user.userType eq 0}">
-					<a id="btn5" href="#" class="easyui-linkbutton" onclick="userManage(this)"
+					<a id="btn6" href="#" class="easyui-linkbutton" onclick="userManage(this)"
 						data-options="iconCls:'icon-blank',plain:true">用户管理</a>
 					<br>
 				</c:if>
+				<a id="btn7" href="#" class="easyui-linkbutton" onclick="modifyPassword(this)"
+					data-options="iconCls:'icon-blank',plain:true">修改密码</a>
 			</div>
 		</div>
 	</div>
@@ -137,6 +139,20 @@
 				});
 			}
 		}
+		
+		function modifyPassword(btn){
+			if ($('#tt').tabs('exists', btn.text)) {
+				$('#tt').tabs("select", btn.text);
+			} else {
+				$('#tt').tabs("add", {
+					title : btn.text,
+					href : '${basePath}/user/modifyPassword.action',
+					closable : true,
+					selected : true,
+				});
+			}
+		}
+		
 		//用户管理
 		function userManage(btn) {
 			if ($('#tt').tabs('exists', btn.text)) {
@@ -163,6 +179,9 @@
 				});
 			}
 		}
+		
+		
+		
 	</script>
 </body>
 

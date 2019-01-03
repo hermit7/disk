@@ -62,9 +62,9 @@
 	<table id="tb" class="filetable">
 		<thead>
 			<tr>
-				<th width="5px"><input name="" type="checkbox" value="" /></th>
+				<th><input name="" type="checkbox" value="" /></th>
 				<th>用户昵称</th>
-				<td width="200px"></td>
+				<th width="200px"></th>
 				<th>备注</th>
 			</tr>
 		</thead>
@@ -79,11 +79,11 @@
 					<td>
 						<div class="action">
 							<img src="${basePath }/images/remark.png"
-								onclick="remarkFriend(this)" style="width: 20px; height: 25px"
+								onclick="remarkFriend(this)" 
 								title="备注"> <img src="${basePath }/images/delete.png"
-								onclick="deleteFriend(this)" style="width: 20px; height: 25px"
+								onclick="deleteFriend(this)" 
 								title="删除"> <img src="${basePath }/images/share.png"
-								style="width: 20px; height: 25px" title="分享">
+								title="分享">
 						</div>
 					</td>
 					<td width="200px"><input class="fileinput" type="text"

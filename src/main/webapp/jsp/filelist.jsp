@@ -88,9 +88,9 @@
 	<table id="tb" class="filetable">
 		<thead>
 			<tr>
-				<th width="5px"><input name="" type="checkbox" value="" /></th>
+				<th><input name="" type="checkbox" value="" /></th>
 				<th>文件名</th>
-				<td width="200px"></td>
+				<th width="200px"></th>
 				<th>修改日期</th>
 				<th>大小</th>
 			</tr>
@@ -98,7 +98,7 @@
 		<tbody>
 			<c:forEach items="${fileList}" var="file" varStatus="sta">
 				<tr class="row">
-					<td><input id="box" name="" type="checkbox" value="" /></td>
+					<td><input id="box" type="checkbox" /></td>
 					<td width="500px"><c:choose>
 							<c:when test="${file.type=='d'}">
 								<a href="javascript:void(0)" ondblclick="openFile('${file.path}')">
@@ -134,14 +134,11 @@
 						</c:choose></td>
 					<td>
 						<div class="action">
-							<img src="${basePath }/images/modify.png" onclick="modifyFile(this)"
-								style="width: 20px; height: 25px" title="修改"> <img
-								src="${basePath }/images/delete.png" onclick="deleteFile('${file.path}')"
-								style="width: 20px; height: 25px" title="删除"> <img src="${basePath }/images/share.png"
-								onclick="shareFile('${file.path}')" style="width: 20px; height: 25px" title="分享"> <img
-								src="${basePath }/images/download.png" onclick="downloadFile('${file.path}')"
-								style="width: 20px; height: 25px" title="下载"> <img src="${basePath }/images/more.png"
-								onclick="moveFile(this)" style="width: 20px; height: 25px" title="更多">
+							<img src="${basePath }/images/modify.png" onclick="modifyFile(this)" title="修改"> <img
+								src="${basePath }/images/delete.png" onclick="deleteFile('${file.path}')" title="删除">
+							<img src="${basePath }/images/share.png" onclick="shareFile('${file.path}')" title="分享">
+							<img src="${basePath }/images/download.png" onclick="downloadFile('${file.path}')" title="下载">
+							<img src="${basePath }/images/more.png" onclick="moveFile(this)" title="更多">
 						</div>
 					</td>
 					<td>${file.time }</td>

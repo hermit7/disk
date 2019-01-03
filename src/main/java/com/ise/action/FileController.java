@@ -85,32 +85,46 @@ public class FileController {
 	}
 
 	@RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
-	public void uploadFile2(HttpSession session, HttpServletResponse response,
+	public void uploadFile(HttpSession session, HttpServletResponse response,
 			@RequestParam(value = "filename") CommonsMultipartFile file,
 			@RequestParam(value = "curPath") String curPath) {
 		boolean flag = false;
 		PrintWriter out = null;
 		User user = (User) session.getAttribute("user");
-		long usedSpace = user.getUsedSpace();
+		String userType = user.getUserType();
 		if (file == null) {
 			System.out.println("file is empty");
 			return;
 		}
 		String name = file.getOriginalFilename();
-		long size = file.getSize() / 1024;
-		if (usedSpace < Constants.DEFAULT_MAX_SPACE_KBIT) {
-			usedSpace += size;
-			user.setUsedSpace(usedSpace);
-			session.setAttribute("user", user);
+		if (userType.equals("2")) {
+			long usedSpace = Long.parseLong(user.getUsedSpace());
+			int spaceTimes = user.getSpaceTimes();
+			// 普通用户
+			if (usedSpace < Constants.DEFAULT_MAX_SPACE_KBIT * spaceTimes) {
+				long size = file.getSize() / 1024;
+				usedSpace += size;
+				user.setUsedSpace(String.valueOf(usedSpace));
+				session.setAttribute("user", user);
+				try {
+					curPath = URLDecoder.decode(curPath, "UTF-8");
+					flag = fileService.uploadFile(file.getInputStream(), curPath, name, user.getUserId(), usedSpace);
+					out = response.getWriter();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			} else {
+				return;
+			}
+		} else {
+			// 管理员上传
 			try {
 				curPath = URLDecoder.decode(curPath, "UTF-8");
-				flag = fileService.uploadFile(file.getInputStream(), curPath, name, user.getUserId(), usedSpace);
+				flag = fileService.uploadFileForAdmin(file.getInputStream(), curPath, name);
 				out = response.getWriter();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		} else {
-			return;
 		}
 		if (out != null) {
 			if (flag == true) {
@@ -132,7 +146,7 @@ public class FileController {
 	public boolean deleteFile(HttpSession session, String path) {
 		User user = (User) session.getAttribute("user");
 		long size = fileService.deleteFile(user.getUserId(), path);
-		user.setUsedSpace(user.getUsedSpace() - size);
+		user.setUsedSpace(String.valueOf(Long.parseLong(user.getUsedSpace()) - size));
 		session.setAttribute("user", user);
 		return size > 0 ? true : false;
 	}

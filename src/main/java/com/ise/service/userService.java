@@ -11,4 +11,12 @@ public interface UserService {
 	User existUser(String username, String password);
 
 	List<User> listAllUsers();
+
+	boolean banUser(String userId);
+
+	boolean permitUser(String userId);
+
+	boolean dilatation(String userId);
+
+	boolean reduction(String userId);
 }

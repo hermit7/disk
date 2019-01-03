@@ -42,9 +42,9 @@
 	<table id="tb" class="filetable">
 		<thead>
 			<tr>
-				<th width="5px"><input name="" type="checkbox" value="" /></th>
+				<th><input name="" type="checkbox" value="" /></th>
 				<th>文件名</th>
-				<td width="200px"></td>
+				<th width="200px"></th>
 				<th>分享日期</th>
 				<th>大小</th>
 				<th>分享人</th>
@@ -98,17 +98,17 @@
 							<c:if test="${share.providerName eq user.username}">
 								<img src="${basePath }/images/delete.png"
 									onclick="deleteShare('${groupNumber}','${share.shareId}')"
-									style="width: 20px; height: 25px" title="删除">
+									 title="删除">
 							</c:if>
 							<img src="${basePath }/images/share.png"
 								onclick="shareShare('${share.filePath}')"
-								style="width: 20px; height: 25px" title="分享"> <img
+								 title="分享"> <img
 								src="${basePath }/images/download.png"
 								onclick="downloadShare('${share.filePath}')"
-								style="width: 20px; height: 25px" title="下载"> <img
+								 title="下载"> <img
 								src="${basePath }/images/save.png"
 								onclick="saveShare('${share.filePath}')"
-								style="width: 20px; height: 25px" title="保存">
+								 title="保存">
 						</div>
 					</td>
 					<td>${share.shareTime }</td>

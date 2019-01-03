@@ -129,9 +129,11 @@ public class RelationDaoImpl implements RelationDao {
 			hbaseDao.updateOneData(Constants.GROUP_MEMBER_TABLE, userId + "_" + groupNumber,
 					Constants.GROUP_MEMBER_FAMILY, Constants.GROUP_MEMBER_COLUMN[1], groupNumber);
 			hbaseDao.updateOneData(Constants.GROUP_MEMBER_TABLE, userId + "_" + groupNumber,
-					Constants.GROUP_MEMBER_FAMILY, Constants.GROUP_MEMBER_COLUMN[2], username);
+					Constants.GROUP_MEMBER_FAMILY, Constants.GROUP_MEMBER_COLUMN[2], userId);
 			hbaseDao.updateOneData(Constants.GROUP_MEMBER_TABLE, userId + "_" + groupNumber,
-					Constants.GROUP_MEMBER_FAMILY, Constants.GROUP_MEMBER_COLUMN[3], groupOwner);
+					Constants.GROUP_MEMBER_FAMILY, Constants.GROUP_MEMBER_COLUMN[3], username);
+			hbaseDao.updateOneData(Constants.GROUP_MEMBER_TABLE, userId + "_" + groupNumber,
+					Constants.GROUP_MEMBER_FAMILY, Constants.GROUP_MEMBER_COLUMN[4], groupOwner);
 		}
 		return true;
 	}
@@ -150,7 +152,7 @@ public class RelationDaoImpl implements RelationDao {
 			String groupnumber = Bytes.toString(result.getValue(Bytes.toBytes(Constants.GROUP_MEMBER_FAMILY),
 					Bytes.toBytes(Constants.GROUP_MEMBER_COLUMN[1])));
 			String owner = Bytes.toString(result.getValue(Bytes.toBytes(Constants.GROUP_MEMBER_FAMILY),
-					Bytes.toBytes(Constants.GROUP_MEMBER_COLUMN[3])));
+					Bytes.toBytes(Constants.GROUP_MEMBER_COLUMN[4])));
 			group.setGroupName(groupname);
 			group.setGroupNumber(groupnumber);
 			group.setOwner(owner);
@@ -197,8 +199,11 @@ public class RelationDaoImpl implements RelationDao {
 		while (iter.hasNext()) {
 			member = new User();
 			Result result = iter.next();
-			String username = Bytes.toString(result.getValue(Bytes.toBytes(Constants.GROUP_MEMBER_FAMILY),
+			String userId = Bytes.toString(result.getValue(Bytes.toBytes(Constants.GROUP_MEMBER_FAMILY),
 					Bytes.toBytes(Constants.GROUP_MEMBER_COLUMN[2])));
+			String username = Bytes.toString(result.getValue(Bytes.toBytes(Constants.GROUP_MEMBER_FAMILY),
+					Bytes.toBytes(Constants.GROUP_MEMBER_COLUMN[3])));
+			member.setUserId(userId);
 			member.setUsername(username);
 			list.add(member);
 		}
@@ -212,7 +217,7 @@ public class RelationDaoImpl implements RelationDao {
 		String groupName = Bytes.toString(result.getValue(Bytes.toBytes(Constants.GROUP_MEMBER_FAMILY),
 				Bytes.toBytes(Constants.GROUP_MEMBER_COLUMN[0])));
 		String owner = Bytes.toString(result.getValue(Bytes.toBytes(Constants.GROUP_MEMBER_FAMILY),
-				Bytes.toBytes(Constants.GROUP_MEMBER_COLUMN[2])));
+				Bytes.toBytes(Constants.GROUP_MEMBER_COLUMN[4])));
 		map.put("groupName", groupName);
 		map.put("owner", owner);
 		return map;

@@ -9,7 +9,9 @@ import com.ise.pojo.HdfsFolder;
 public interface FileService {
 	public List<HFile> listFiles(String path);
 
-	public boolean uploadFile(InputStream in, String path, String name,String userId ,long remainSpace);
+	public boolean uploadFile(InputStream in, String path, String name, String userId, long remainSpace);
+
+	public boolean uploadFileForAdmin(InputStream in, String path, String name);
 
 	public boolean modifyFile(String curPath, String originName, String destName);
 

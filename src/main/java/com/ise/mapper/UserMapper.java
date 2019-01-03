@@ -18,4 +18,12 @@ public interface UserMapper {
 	
 	void decreaseUsedSpace(@Param(value = "userId") String userId, @Param(value = "size") Long size);
 
+	boolean banUser(String userId);
+
+	boolean permitUser(String userId);
+
+	boolean dilatation(String userId); //扩容
+
+	boolean reduction(String userId);
+
 }

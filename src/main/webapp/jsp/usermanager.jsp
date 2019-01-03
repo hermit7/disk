@@ -34,7 +34,7 @@
 		<ul class="placeul">
 			<%-- 此处放一个面包屑导航 --%>
 			<li>
-				<a href="javascript:void(0)" onclick="listFriends()">用户管理</a>
+				<a href="javascript:void(0)" onclick="listAllUsers()">用户管理</a>
 			</li>
 			<%-- <c:forEach items="${breadlist}" var="bread">
 				<li><a href="javascript:void(0)"
@@ -65,32 +65,51 @@
 	<table id="tb" class="filetable">
 		<thead>
 			<tr>
-				<th width="5px"><input name="" type="checkbox" value="" /></th>
+				<th><input name="" type="checkbox" value="" /></th>
 				<th>用户昵称</th>
-				<th width="200px"></th>
+				<th width="150px"></th>
 				<th>用户类型</th>
-				<th>剩余空间</th>
+				<th>已用大小</th>
+				<th>账号状态</th>
+				<th>容量</th>
 			</tr>
 		</thead>
 		<tbody>
 			<c:forEach items="${userList}" var="user" varStatus="sta">
 				<tr class="row">
 					<td><input id="box" name="" type="checkbox" value="" /></td>
-					<td width="300px"><input class="hidden" type="hidden" value="${user.userId}"> <img
-						src="${basePath }/images/friend.png" /> <input type="text" value="${user.username}"
-							readonly="readonly"></td>
+					<td width="300px"><img src="${basePath }/images/friend.png" /> <input type="text"
+							value="${user.username}" readonly="readonly"></td>
 					<td>
 						<div class="action">
-							<img src="${basePath }/images/share.png" style="width: 20px; height: 25px" title="分享">
-							<img src="${basePath }/images/remark.png" onclick="banUser(this)"
-								style="width: 20px; height: 25px" title="禁用"> <img
-								src="${basePath }/images/delete.png" onclick="deleteUser(this)"
-								style="width: 20px; height: 25px" title="删除">
-
+							<img src="${basePath }/images/ban.png" onclick="banUser('${user.userId}')" title="禁用">
+							<img src="${basePath }/images/permit.png" onclick="permitUser('${user.userId}')" title="解禁">
+								<img src="${basePath }/images/reduction.png" onclick="reduction('${user.userId}')"
+								title="缩容"> <img src="${basePath }/images/dilatation.png" onclick="dilatation('${user.userId}')"
+								title="扩容">
 						</div>
 					</td>
-					<td><input type="text" value="${user.userType }" readonly="readonly"></td>
+					<td><c:choose>
+							<c:when test="${user.userType eq 0}">
+								<input type="text" value="管理员" readonly="readonly">
+							</c:when>
+							<c:when test="${user.userType eq 1}">
+								<input type="text" value="普通用户" readonly="readonly">
+							</c:when>
+							<c:when test="${user.userType eq 2}">
+								<input type="text" value="禁用" readonly="readonly">
+							</c:when>
+						</c:choose></td>
 					<td><input class="fileinput" type="text" value="${user.usedSpace}" readOnly="readonly"></td>
+					<td><c:choose>
+							<c:when test="${user.status eq 0}">
+								<input type="text" value="正常" readonly="readonly">
+							</c:when>
+							<c:when test="${user.status eq 1}">
+								<input type="text" value="禁用" readonly="readonly">
+							</c:when>
+						</c:choose></td>
+					<td><input type="text" value="${user.spaceTimes}倍" readOnly="readonly"></td>
 				</tr>
 
 			</c:forEach>
@@ -146,36 +165,98 @@
 	</script>
 
 	<script type="text/javascript">
-		function listFriends() {
-			var url = "${basePath}/relation/friend.action";
+		function listAllUsers() {
+			var url = "${basePath}/system/userManage.action";
 			var tab = $('#tt', window.parent.document).tabs('getSelected');
 			tab.panel('refresh', url);
 		}
 
 		/**
-			关注用户
+			禁用
 		 */
-		function follow() {
-			var url = "${basePath}/relation/follow.action";
-			var friendName = $("#searchUser").val();
-			var friendId = $("#followId").val();
-			console.log(friendName);
-			console.log(friendId);
+		function banUser(userId) {
+			var url = "${basePath}/system/banUser.action";
 			$.ajax({
 				url : url,
 				type : "POST",
 				data : {
-					"friendId" : friendId,
-					"friendName" : friendName
+					"userId" : userId,
 				},
 				success : function(data) {
 					$.messager.show({
 						title : 'tip',
-						msg : '关注成功',
+						msg : '禁用成功',
 						timeout : 1000,
 						showType : 'slide'
 					});
-					listFriends();
+					listAllUsers();
+				}
+			});
+		}
+
+		/**
+			解禁
+		 */
+		function permitUser(userId) {
+			var url = "${basePath}/system/permitUser.action";
+			$.ajax({
+				url : url,
+				type : "POST",
+				data : {
+					"userId" : userId,
+				},
+				success : function(data) {
+					$.messager.show({
+						title : 'tip',
+						msg : '解禁成功',
+						timeout : 1000,
+						showType : 'slide'
+					});
+					listAllUsers();
+				}
+			});
+		}
+		/**
+			扩容
+		 */
+		function dilatation(userId) {
+			var url = "${basePath}/system/dilatation.action";
+			$.ajax({
+				url : url,
+				type : "POST",
+				data : {
+					"userId" : userId,
+				},
+				success : function(data) {
+					$.messager.show({
+						title : 'tip',
+						msg : '扩容成功',
+						timeout : 1000,
+						showType : 'slide'
+					});
+					listAllUsers();
+				}
+			});
+		}
+		/**
+			缩容
+		 */
+		function reduction(userId) {
+			var url = "${basePath}/system/reduction.action";
+			$.ajax({
+				url : url,
+				type : "POST",
+				data : {
+					"userId" : userId,
+				},
+				success : function(data) {
+					$.messager.show({
+						title : 'tip',
+						msg : '缩容成功',
+						timeout : 1000,
+						showType : 'slide'
+					});
+					listAllUsers();
 				}
 			});
 		}

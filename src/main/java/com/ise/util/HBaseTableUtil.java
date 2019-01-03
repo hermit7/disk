@@ -20,11 +20,11 @@ public class HBaseTableUtil {
 
 	public static void main(String[] args) {
 		// dropTables();
-		createTable(Constants.SHARE_TABLE, Constants.SHARE_FAMILY);
+//		createTable(Constants.SHARE_TABLE, Constants.SHARE_FAMILY);
 		createTable(Constants.GROUP_MEMBER_TABLE, Constants.GROUP_MEMBER_FAMILY);
-		createTable(Constants.GROUP_SHARE_TABLE, Constants.GROUP_SHARE_FAMILY);
-		createTable(Constants.TABLE_GID, Constants.FAMILY_GID);
-		createTable(Constants.FRIEND_TABLE, Constants.FRIEND_FAMILY);
+//		createTable(Constants.GROUP_SHARE_TABLE, Constants.GROUP_SHARE_FAMILY);
+//		createTable(Constants.TABLE_GID, Constants.FAMILY_GID);
+//		createTable(Constants.FRIEND_TABLE, Constants.FRIEND_FAMILY);
 		// dropTable("group");
 	}
 

@@ -42,7 +42,12 @@ public class FileServiceImpl implements FileService {
 		userMapper.increaseUsedSpace(userId, usedSpace);
 		return hdfsDao.uploadFile(in, path, name);
 	}
-
+	
+	@Override
+	public boolean uploadFileForAdmin(InputStream in, String path, String name) {
+		return hdfsDao.uploadFile(in, path, name);
+	}
+	
 	@Override
 	public boolean modifyFile(String curPath, String originName, String destName) {
 		return hdfsDao.modifyFile(curPath, originName, destName);

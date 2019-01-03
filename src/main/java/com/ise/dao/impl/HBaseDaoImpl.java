@@ -16,10 +16,8 @@ import org.apache.hadoop.hbase.filter.Filter;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.springframework.stereotype.Repository;
 
-import com.ise.constant.Constants;
 import com.ise.dao.HBaseDao;
 import com.ise.dao.conn.HBaseConn;
-import com.ise.pojo.User;
 
 @Repository("hbaseDao")
 public class HBaseDaoImpl implements HBaseDao {
@@ -27,21 +25,6 @@ public class HBaseDaoImpl implements HBaseDao {
 	private Connection conn = HBaseConn.getConn();
 
 	public static void main(String[] args) {
-		HBaseDao impl = new HBaseDaoImpl();
-		User user = new User();
-		user.setUserId("1");
-		user.setUsername("李磊");
-		user.setNickname("da's阿瑟东");
-		User friend = new User();
-		friend.setUserId("2");
-		friend.setUsername("李正英");
-		friend.setNickname("小可爱");
-		impl.updateMoreData(Constants.FRIEND_TABLE, user.getUserId() + "_" + friend.getUserId(),
-				Constants.FRIEND_FAMILY, Constants.FRIEND_COLUMN,
-				new String[] { friend.getUserId(), friend.getUsername(), friend.getNickname() });
-		impl.updateMoreData(Constants.FRIEND_TABLE, friend.getUserId() + "_" + user.getUserId(),
-				Constants.FRIEND_FAMILY, Constants.FRIEND_COLUMN,
-				new String[] { user.getUserId(), user.getUsername(), user.getNickname() });
 	}
 
 	public long incrCounter(String tableName, String rowKey, String family, String column, long range) {
